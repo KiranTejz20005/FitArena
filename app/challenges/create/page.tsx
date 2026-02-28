@@ -18,7 +18,7 @@ export default function CreateChallengePage() {
   const router = useRouter()
   const [form, setForm] = useState(initialForm)
   const [error, setError] = useState<string | null>(null)
-  const { createChallenge, isPending, isConfirming, isConfirmed, isConnected } = useHealthChain()
+  const { createChallenge, isPending, isConfirming, isConfirmed, isConnected, isMonadTestnet } = useHealthChain()
 
   useEffect(() => {
     if (isConfirmed) {
@@ -123,6 +123,9 @@ export default function CreateChallengePage() {
             </section>
 
             <div className="pt-10 flex flex-col gap-6">
+              {isConnected && !isMonadTestnet && (
+                <p className="text-hc-amber text-sm text-center">Switch to Monad Testnet to pay in MON. You&apos;ll be prompted when you click Deploy.</p>
+              )}
               {error && <p className="text-red-400 text-sm text-center">{error}</p>}
               <Button
                 onClick={handleSubmit}

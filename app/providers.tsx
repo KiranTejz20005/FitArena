@@ -6,7 +6,7 @@ import { Moon, Sun } from 'lucide-react'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
-import { config } from '@/lib/wagmi'
+import { config, monadTestnet } from '@/lib/wagmi'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +19,7 @@ function Web3Providers({ children }: { children: React.ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider
+          initialChain={monadTestnet}
           theme={darkTheme({
             accentColor: '#a855f7',
             accentColorForeground: 'white',

@@ -57,7 +57,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${_geist.className} ${_geistMono.className} font-sans antialiased bg-background text-foreground selection:bg-fuchsia-500/30`}>
+      <body className={`${_geist.className} ${_geistMono.className} font-sans antialiased bg-background text-foreground selection:bg-fuchsia-500/30`} suppressHydrationWarning>
         <Providers>
           <div className="relative min-h-screen">
             {/* Ambient Background Gradients */}

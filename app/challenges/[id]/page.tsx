@@ -28,7 +28,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   const isInvalidId = Number.isNaN(challengeId) || challengeId < 0
 
   const { address } = useAccount()
-  const { joinChallenge, claimReward, checkIn, isPending, isConfirming } = useHealthChain()
+  const { joinChallenge, claimReward, checkIn, isPending, isConfirming, isMonadTestnet } = useHealthChain()
   const { challenge: rawChallenge, isLoading: challengeLoading } = useChallenge(challengeId)
   const { participant, refetch: refetchParticipant } = useParticipant(challengeId, address)
 
@@ -100,7 +100,8 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   const dummyOverlay = DUMMY_CHALLENGES.find((c) => c.id === id)
   const peopleQuit = dummyOverlay?.peopleQuit ?? 0
   const profitIfComplete = dummyOverlay?.profitIfComplete ?? rewardEstimate
-  const inTheRace = challenge.participantCount - peopleQuit
+  const committed = challenge.participantCount
+  const quitDisplay = Math.min(peopleQuit, committed)
 
   return (
     <div className="pb-24">
@@ -147,8 +148,8 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
             { label: 'Prize Pool', value: challenge.prizePool, icon: <Trophy className="w-4 h-4 text-fuchsia-400" /> },
-            { label: 'In the race', value: inTheRace, suffix: '', icon: <Users className="w-4 h-4 text-rose-400" /> },
-            { label: 'Your Stake', value: challenge.stakeAmount, icon: <Lock className="w-4 h-4 text-hc-amber" /> },
+            { label: 'Committed', value: committed, suffix: '', icon: <Users className="w-4 h-4 text-rose-400" /> },
+            { label: 'Quit', value: quitDisplay, suffix: '', icon: <UserMinus className="w-4 h-4 text-white/50" /> },
             { label: 'Days Left', value: challenge.daysLeft, suffix: 'Days', icon: <Clock className="w-4 h-4 text-hc-green" /> },
           ].map((stat, i) => (
             <div key={i} className="glass p-6 border-white/5 relative group hover:border-white/10 transition-colors">
@@ -234,6 +235,9 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
                 </span>
               )}
             </div>
+            {address && !isMonadTestnet && (
+              <p className="text-hc-amber text-xs mt-1">Wrong network. Click the button below to switch to Monad Testnet (MON).</p>
+            )}
             {(joinError || claimError) && (
               <p className="text-red-400 text-xs mt-1">{joinError ?? claimError}</p>
             )}

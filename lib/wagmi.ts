@@ -1,8 +1,9 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 import { defineChain } from 'viem'
 
+// Official Monad Testnet chain ID (10143). Using 41454 causes "duplicate RPC" errors when wallet already has Monad Testnet.
 export const monadTestnet = defineChain({
-  id: 41454,
+  id: 10143,
   name: 'Monad Testnet',
   nativeCurrency: {
     name: 'Monad',
@@ -20,7 +21,7 @@ export const monadTestnet = defineChain({
   blockExplorers: {
     default: {
       name: 'Monad Explorer',
-      url: 'https://explorer.testnet.monad.xyz',
+      url: 'https://testnet.monadexplorer.com',
     },
   },
   testnet: true,

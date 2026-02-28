@@ -1,9 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { useAccount, useWriteContract, useReadContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useWriteContract, useReadContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi'
 import { parseEther } from 'viem'
 import { CONTRACT_ADDRESS, CONTRACT_ABI, isContractConfigured } from '@/lib/contract'
+import { monadTestnet } from '@/lib/wagmi'
 import type { ChainChallenge, ChainParticipant } from '@/types'
 
 /** Strip " MON" suffix so parseEther gets a valid decimal string (e.g. "1.0000 MON" -> "1.0000"). */
@@ -16,7 +17,8 @@ function toEtherString(value: string): string {
 // ============================================
 
 export function useHealthChain() {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected, chainId } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
   const { writeContractAsync, isPending, error } = useWriteContract()
   const [lastTxHash, setLastTxHash] = useState<`0x${string}` | undefined>()
 
@@ -24,7 +26,23 @@ export function useHealthChain() {
     hash: lastTxHash,
   })
 
+  /** Ensure wallet is on Monad Testnet (chainId 10143) before sending a tx; prompts user to switch if not. */
+  const ensureMonadChain = async () => {
+    if (chainId === monadTestnet.id) return
+    if (!switchChainAsync) return
+    try {
+      await switchChainAsync({ chainId: monadTestnet.id })
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e)
+      if (msg.includes('same RPC endpoint') || msg.includes('existing network')) {
+        throw new Error('Monad Testnet is already in your wallet. Please switch to it manually in MetaMask, then try again.')
+      }
+      throw e
+    }
+  }
+
   const createChallenge = async (name: string, stakeAmount: string, durationDays: number) => {
+    await ensureMonadChain()
     const tx = await writeContractAsync({
       address: CONTRACT_ADDRESS,
       abi: CONTRACT_ABI,
@@ -36,6 +54,7 @@ export function useHealthChain() {
   }
 
   const joinChallenge = async (challengeId: number, stakeAmount: string) => {
+    await ensureMonadChain()
     const tx = await writeContractAsync({
       address: CONTRACT_ADDRESS,
       abi: CONTRACT_ABI,
@@ -48,6 +67,7 @@ export function useHealthChain() {
   }
 
   const checkIn = async (challengeId: number, day: number) => {
+    await ensureMonadChain()
     const tx = await writeContractAsync({
       address: CONTRACT_ADDRESS,
       abi: CONTRACT_ABI,
@@ -59,6 +79,7 @@ export function useHealthChain() {
   }
 
   const claimReward = async (challengeId: number) => {
+    await ensureMonadChain()
     const tx = await writeContractAsync({
       address: CONTRACT_ADDRESS,
       abi: CONTRACT_ABI,
@@ -72,6 +93,8 @@ export function useHealthChain() {
   return {
     address,
     isConnected,
+    chainId,
+    isMonadTestnet: chainId === monadTestnet.id,
     createChallenge,
     joinChallenge,
     checkIn,
