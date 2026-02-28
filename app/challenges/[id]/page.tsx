@@ -10,50 +10,50 @@ const challengeData: Record<string, any> = {
     icon: '🧘',
     name: '30-Day Yoga Streak',
     category: 'Mindfulness',
-    description: 'Complete 20 mins of daily yoga. Verify via photo proof or wearable data.',
-    prizePool: '5,000 MON',
+    description: 'Complete 20 mins of daily yoga. Verify via photo proof.',
+    reward: '500 Points',
     participants: 42,
     daysLeft: 15,
     progress: 68,
-    details: 'This challenge encourages daily mindfulness practice. Each day you complete 20 minutes of yoga, you earn points towards the prize pool.',
+    details: 'This challenge encourages daily mindfulness practice. Each day you complete 20 minutes of yoga, you earn points towards your goal.',
     requirements: [
       'Complete 20 minutes of yoga daily',
       'Upload photo proof or sync wearable data',
       'Maintain streak for 30 days',
     ],
     rewards: {
-      first: '2,500 MON',
-      second: '1,500 MON',
-      third: '1,000 MON',
+      first: '500 Points',
+      second: '300 Points',
+      third: '150 Points',
     },
   },
   '2': {
     icon: '🏃',
     name: '10K Steps Challenge',
     category: 'Cardio',
-    description: 'Hit 10,000 steps every day for a week. Syncs with Apple Health & Google Fit.',
-    prizePool: '12,500 MON',
+    description: 'Hit 10,000 steps every day for a week.',
+    reward: '300 Points',
     participants: 128,
     daysLeft: 7,
     progress: 43,
-    details: 'Challenge yourself to hit 10,000 steps daily. This 7-day challenge syncs with your Apple Health or Google Fit data.',
+    details: 'Challenge yourself to hit 10,000 steps daily. Sync with your fitness tracker for automatic verification.',
     requirements: [
       'Walk 10,000 steps daily',
       'Sync with Apple Health or Google Fit',
       'Complete 7 consecutive days',
     ],
     rewards: {
-      first: '6,000 MON',
-      second: '4,000 MON',
-      third: '2,500 MON',
+      first: '300 Points',
+      second: '200 Points',
+      third: '100 Points',
     },
   },
   '3': {
     icon: '🥗',
     name: 'Plant-Based February',
     category: 'Nutrition',
-    description: 'Eat plant-based meals for 28 days. Upload meal photos to verify and earn.',
-    prizePool: '3,000 MON',
+    description: 'Eat plant-based meals for 28 days.',
+    reward: '400 Points',
     participants: 15,
     daysLeft: 28,
     progress: 85,
@@ -64,9 +64,9 @@ const challengeData: Record<string, any> = {
       'Complete 28 days',
     ],
     rewards: {
-      first: '1,500 MON',
-      second: '1,000 MON',
-      third: '500 MON',
+      first: '400 Points',
+      second: '250 Points',
+      third: '125 Points',
     },
   },
 }
@@ -76,47 +76,41 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   const challenge = challengeData[id] || challengeData['1']
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+      <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-shadow">
-              ❤️
+            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:bg-gray-800 transition-colors">
+              ⚡
             </div>
-            <span className="text-xl font-bold text-white">HealthChain</span>
+            <span className="text-xl font-bold text-black">FitReward</span>
           </Link>
 
           <div className="flex items-center gap-8">
             <div className="hidden md:flex items-center gap-6">
-              <Link href="/challenges" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/challenges" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Challenges
               </Link>
-              <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/dashboard" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Dashboard
               </Link>
-              <Link href="/leaderboard" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/leaderboard" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Leaderboard
               </Link>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="px-3 py-1.5 bg-slate-800 rounded-full flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-slate-300 font-medium">Monad Testnet</span>
-              </div>
-              <Button variant="outline" className="border-slate-600 text-white hover:bg-slate-800 hidden sm:inline-flex">
-                Connect Wallet
-              </Button>
-            </div>
+            <Button className="bg-black text-white hover:bg-gray-800 transition-colors hidden sm:inline-flex">
+              Connect Wallet
+            </Button>
           </div>
         </div>
       </nav>
 
       {/* Header */}
-      <section className="py-8 px-6 border-b border-slate-800">
+      <section className="py-8 px-6 border-b border-gray-200">
         <div className="max-w-4xl mx-auto">
-          <Link href="/challenges" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6">
+          <Link href="/challenges" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Challenges
           </Link>
@@ -125,25 +119,25 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
             <div className="text-6xl">{challenge.icon}</div>
             <div className="flex-grow">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold text-white">{challenge.name}</h1>
-                <span className="px-3 py-1 bg-slate-700 text-slate-300 text-xs font-semibold rounded-full">
+                <h1 className="text-4xl font-bold text-black">{challenge.name}</h1>
+                <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
                   {challenge.category}
                 </span>
               </div>
-              <p className="text-slate-400 mb-4">{challenge.description}</p>
+              <p className="text-gray-600 mb-4">{challenge.description}</p>
 
               <div className="flex items-center gap-6">
                 <div>
-                  <div className="text-slate-400 text-xs font-medium">PRIZE POOL</div>
-                  <div className="text-2xl font-bold text-purple-400">{challenge.prizePool}</div>
+                  <div className="text-gray-600 text-xs font-medium">REWARD</div>
+                  <div className="text-2xl font-bold text-blue-600">{challenge.reward}</div>
                 </div>
                 <div>
-                  <div className="text-slate-400 text-xs font-medium">PARTICIPANTS</div>
-                  <div className="text-2xl font-bold text-white">{challenge.participants}</div>
+                  <div className="text-gray-600 text-xs font-medium">PARTICIPANTS</div>
+                  <div className="text-2xl font-bold text-black">{challenge.participants}</div>
                 </div>
                 <div>
-                  <div className="text-slate-400 text-xs font-medium">DAYS LEFT</div>
-                  <div className="text-2xl font-bold text-green-400">{challenge.daysLeft}</div>
+                  <div className="text-gray-600 text-xs font-medium">DAYS LEFT</div>
+                  <div className="text-2xl font-bold text-black">{challenge.daysLeft}</div>
                 </div>
               </div>
             </div>
@@ -157,56 +151,56 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
           {/* Left Column - Details */}
           <div className="lg:col-span-2 space-y-8">
             {/* Progress */}
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-              <h3 className="text-lg font-bold text-white mb-4">Progress</h3>
-              <div className="w-full bg-slate-700 rounded-full h-3 mb-2">
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+              <h3 className="text-lg font-bold text-black mb-4">Progress</h3>
+              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
                 <div 
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 h-3 rounded-full" 
+                  className="bg-black h-3 rounded-full transition-all duration-300" 
                   style={{ width: `${challenge.progress}%` }}
                 ></div>
               </div>
-              <div className="text-sm text-slate-400">{challenge.progress}% Complete</div>
+              <div className="text-sm text-gray-600">{challenge.progress}% Complete</div>
             </div>
 
             {/* Description */}
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-              <h3 className="text-lg font-bold text-white mb-4">About This Challenge</h3>
-              <p className="text-slate-300 leading-relaxed mb-4">{challenge.details}</p>
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+              <h3 className="text-lg font-bold text-black mb-4">About This Challenge</h3>
+              <p className="text-gray-700 leading-relaxed mb-4">{challenge.details}</p>
             </div>
 
             {/* Requirements */}
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-              <h3 className="text-lg font-bold text-white mb-4">Requirements</h3>
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+              <h3 className="text-lg font-bold text-black mb-4">Requirements</h3>
               <ul className="space-y-3">
                 {challenge.requirements.map((req: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-purple-600/30 border border-purple-500 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                    <div className="w-5 h-5 rounded-full bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div className="w-2 h-2 rounded-full bg-white"></div>
                     </div>
-                    <span className="text-slate-300">{req}</span>
+                    <span className="text-gray-700">{req}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {/* Rewards Distribution */}
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-              <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-yellow-500" />
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+              <h3 className="text-lg font-bold text-black mb-4 flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-black" />
                 Reward Distribution
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
-                  <span className="text-white font-medium">🥇 1st Place</span>
-                  <span className="text-green-400 font-bold">{challenge.rewards.first}</span>
+                <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-black transition-colors">
+                  <span className="text-black font-medium">🥇 1st Place</span>
+                  <span className="text-blue-600 font-bold">{challenge.rewards.first}</span>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
-                  <span className="text-white font-medium">🥈 2nd Place</span>
-                  <span className="text-green-400 font-bold">{challenge.rewards.second}</span>
+                <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-black transition-colors">
+                  <span className="text-black font-medium">🥈 2nd Place</span>
+                  <span className="text-blue-600 font-bold">{challenge.rewards.second}</span>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-slate-700/50 rounded-lg">
-                  <span className="text-white font-medium">🥉 3rd Place</span>
-                  <span className="text-green-400 font-bold">{challenge.rewards.third}</span>
+                <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-black transition-colors">
+                  <span className="text-black font-medium">🥉 3rd Place</span>
+                  <span className="text-blue-600 font-bold">{challenge.rewards.third}</span>
                 </div>
               </div>
             </div>
@@ -216,31 +210,31 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
           <div className="space-y-4 h-fit sticky top-20">
             <Button 
               size="lg"
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg h-12"
+              className="w-full bg-black text-white hover:bg-gray-800 font-bold rounded-lg h-12 transition-colors duration-300"
             >
               Join Challenge
               <Zap className="w-5 h-5 ml-2" />
             </Button>
 
-            <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-              <h4 className="font-bold text-white mb-4 flex items-center gap-2">
+            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+              <h4 className="font-bold text-black mb-4 flex items-center gap-2">
                 <Users className="w-4 h-4" />
                 Community
               </h4>
               <div className="space-y-4">
                 <div>
-                  <div className="text-slate-400 text-xs font-medium mb-2">CURRENT PARTICIPANTS</div>
-                  <div className="text-2xl font-bold text-white">{challenge.participants}</div>
+                  <div className="text-gray-600 text-xs font-medium mb-2">CURRENT PARTICIPANTS</div>
+                  <div className="text-2xl font-bold text-black">{challenge.participants}</div>
                 </div>
-                <Button variant="outline" className="w-full border-slate-600 text-white hover:bg-slate-700">
+                <Button variant="outline" className="w-full border border-gray-300 text-black hover:bg-white hover:border-black transition-colors font-semibold">
                   View Leaderboard
                 </Button>
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-xl p-6">
-              <p className="text-sm text-slate-300">
-                <span className="font-bold text-purple-300">Pro Tip:</span> Challenges with clear success criteria and reasonable durations (7-14 days) tend to have 3x higher completion rates.
+            <div className="bg-blue-50 border border-blue-300 rounded-lg p-6">
+              <p className="text-sm text-gray-700">
+                <span className="font-bold text-black">Pro Tip:</span> Challenges with clear goals and reasonable timeframes have higher completion rates.
               </p>
             </div>
           </div>
@@ -248,17 +242,17 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-12 px-6 mt-12">
+      <footer className="border-t border-gray-200 bg-white py-12 px-6 mt-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-2 mb-6 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">
-                ❤️
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
+                ⚡
               </div>
-              <span className="text-white font-bold">HealthChain</span>
+              <span className="text-black font-bold">FitReward</span>
             </div>
-            <p className="text-slate-400 text-sm">
-              © 2024 HealthChain. Built on Monad Network.
+            <p className="text-gray-600 text-sm">
+              © 2026 FitReward. Your fitness platform.
             </p>
           </div>
         </div>

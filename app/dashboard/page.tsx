@@ -2,226 +2,152 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, TrendingUp, Zap, Trophy } from 'lucide-react'
+import { ArrowLeft, Zap, Target, TrendingUp } from 'lucide-react'
 
 export default function DashboardPage() {
-  const userStats = {
-    address: '0x7f3a...9b2c',
-    streak: 22,
-    rank: 3,
-    totalEarned: 142,
-    walletBalance: 8.5,
-  }
-
-  const activeChallenges = [
+  const stats = [
     {
-      id: 1,
-      icon: '🧘',
-      name: '30-Day Yoga Streak',
-      description: 'Maintains flexibility & mindfulness',
-      progress: 68,
-      day: '20/30',
-      reward: 2.4,
+      label: 'Active Challenges',
+      value: '3',
+      icon: Target,
+      color: 'text-black'
     },
     {
-      id: 2,
-      icon: '🏃',
-      name: '10K Steps Challenge',
-      description: 'Daily cardio boost',
-      progress: 43,
-      day: '3.4k/10k',
-      reward: 5.2,
+      label: 'Total Points Earned',
+      value: '1,250',
+      icon: Zap,
+      color: 'text-blue-600'
     },
     {
-      id: 3,
-      icon: '🥗',
-      name: 'Plant-Based February',
-      description: 'Eat clean, train dirty',
-      progress: 85,
-      day: '24/28',
-      reward: 3.1,
+      label: 'Current Streak',
+      value: '12 Days',
+      icon: TrendingUp,
+      color: 'text-black'
     },
   ]
 
-  const claimedRewards = [
+  const activeChallenges = [
     {
-      id: 1,
-      name: '10K Steps Challenge',
-      reward: 8.5,
-      date: '2 days ago',
-      icon: '🏃',
+      name: '30-Day Yoga Streak',
+      progress: 68,
+      daysLeft: 10,
+      pointsEarned: 340,
     },
     {
-      id: 2,
-      name: '7-Day Run Streak',
-      reward: 5.2,
-      date: '5 days ago',
-      icon: '🏃‍♂️',
+      name: '10K Steps Challenge',
+      progress: 43,
+      daysLeft: 5,
+      pointsEarned: 215,
+    },
+    {
+      name: 'Clean Eating Challenge',
+      progress: 85,
+      daysLeft: 2,
+      pointsEarned: 425,
     },
   ]
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+      <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-shadow">
-              ❤️
+            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:bg-gray-800 transition-colors">
+              ⚡
             </div>
-            <span className="text-xl font-bold text-white">HealthChain</span>
+            <span className="text-xl font-bold text-black">FitReward</span>
           </Link>
 
           <div className="flex items-center gap-8">
             <div className="hidden md:flex items-center gap-6">
-              <Link href="/challenges" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/challenges" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Challenges
               </Link>
-              <Link href="/dashboard" className="text-white transition-colors font-medium border-b-2 border-purple-500">
+              <Link href="/dashboard" className="text-black transition-colors font-medium border-b-2 border-black">
                 Dashboard
               </Link>
-              <Link href="/leaderboard" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/leaderboard" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Leaderboard
               </Link>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="px-3 py-1.5 bg-slate-800 rounded-full flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-slate-300 font-medium">Monad Testnet</span>
-              </div>
-              <Button variant="outline" className="border-slate-600 text-white hover:bg-slate-800 hidden sm:inline-flex">
-                Connect Wallet
-              </Button>
-            </div>
+            <Button className="bg-black text-white hover:bg-gray-800 transition-colors hidden sm:inline-flex">
+              Connect Wallet
+            </Button>
           </div>
         </div>
       </nav>
 
       {/* Header */}
-      <section className="py-8 px-6 border-b border-slate-800">
+      <section className="py-12 px-6 border-b border-gray-200">
         <div className="max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6">
+          <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-2">{userStats.address}</h1>
-              <div className="flex items-center gap-4 text-sm">
-                <span className="text-green-400 flex items-center gap-1">
-                  <Zap className="w-4 h-4" /> {userStats.streak}-day streak
-                </span>
-                <span className="text-purple-400 flex items-center gap-1">
-                  <Trophy className="w-4 h-4" /> Rank #{userStats.rank}
-                </span>
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-3xl font-bold text-green-400">+{userStats.totalEarned} MON</div>
-              <p className="text-slate-400 text-sm">Total Earned</p>
-            </div>
-          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-black mb-2">Your Dashboard</h1>
+          <p className="text-gray-600">Track your progress and achievements</p>
         </div>
       </section>
 
-      {/* Stats Cards */}
-      <section className="py-8 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-            <div className="text-slate-400 text-sm font-medium mb-2">Joined</div>
-            <div className="text-3xl font-bold text-white">12</div>
-            <div className="text-slate-400 text-xs mt-2">Challenges</div>
-          </div>
-          <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-            <div className="text-slate-400 text-sm font-medium mb-2">Won</div>
-            <div className="text-3xl font-bold text-white">9</div>
-            <div className="text-slate-400 text-xs mt-2">Victories</div>
-          </div>
-          <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-            <div className="text-slate-400 text-sm font-medium mb-2">Lost</div>
-            <div className="text-3xl font-bold text-white">3</div>
-            <div className="text-slate-400 text-xs mt-2">Defeats</div>
-          </div>
-          <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6">
-            <div className="text-slate-400 text-sm font-medium mb-2">Win Rate</div>
-            <div className="text-3xl font-bold text-white">75%</div>
-            <div className="text-slate-400 text-xs mt-2">Performance</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Active Challenges */}
+      {/* Stats */}
       <section className="py-12 px-6 max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6">Active Challenges</h2>
-        <div className="space-y-4">
-          {activeChallenges.map((challenge) => (
-            <Link key={challenge.id} href={`/challenges/${challenge.id}`}>
-              <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-slate-600 transition-all group cursor-pointer">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-4">
-                    <div className="text-4xl">{challenge.icon}</div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{challenge.name}</h3>
-                      <p className="text-slate-400 text-sm">{challenge.description}</p>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {stats.map((stat, idx) => {
+            const Icon = stat.icon
+            return (
+              <div key={idx} className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="text-gray-600 text-sm font-medium mb-2">{stat.label}</div>
+                    <div className={`text-3xl font-bold ${stat.color}`}>{stat.value}</div>
                   </div>
+                  <Icon className={`w-6 h-6 ${stat.color}`} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Active Challenges */}
+        <div>
+          <h2 className="text-2xl font-bold text-black mb-6">Active Challenges</h2>
+          <div className="space-y-4">
+            {activeChallenges.map((challenge, idx) => (
+              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-black">{challenge.name}</h3>
                   <div className="text-right">
-                    <div className="text-purple-400 font-bold">{challenge.day}</div>
-                    <div className="text-slate-400 text-xs">Progress</div>
+                    <div className="text-sm text-gray-600">{challenge.daysLeft} days left</div>
+                    <div className="text-lg font-bold text-blue-600">{challenge.pointsEarned} pts</div>
                   </div>
                 </div>
-
-                <div className="w-full bg-slate-700 rounded-full h-2 mb-3">
+                <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
-                    className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full transition-all" 
+                    className="bg-black h-2 rounded-full transition-all duration-300" 
                     style={{ width: `${challenge.progress}%` }}
                   ></div>
                 </div>
-
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-400">{challenge.progress}% Complete</span>
-                  <span className="text-green-400 font-bold">+{challenge.reward} MON</span>
-                </div>
+                <div className="text-sm text-gray-600 mt-2">{challenge.progress}% Complete</div>
               </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Claimed Rewards */}
-      <section className="py-12 px-6 max-w-7xl mx-auto">
-        <h2 className="text-2xl font-bold text-white mb-6">Recently Claimed</h2>
-        <div className="space-y-4">
-          {claimedRewards.map((reward) => (
-            <div key={reward.id} className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="text-4xl">{reward.icon}</div>
-                <div>
-                  <h3 className="text-lg font-bold text-white">{reward.name}</h3>
-                  <p className="text-slate-400 text-sm">{reward.date}</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-green-400 font-bold text-xl">+{reward.reward} MON</div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-12 px-6 mt-12">
+      <footer className="border-t border-gray-200 bg-white py-12 px-6 mt-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-2 mb-6 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">
-                ❤️
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
+                ⚡
               </div>
-              <span className="text-white font-bold">HealthChain</span>
+              <span className="text-black font-bold">FitReward</span>
             </div>
-            <p className="text-slate-400 text-sm">
-              © 2024 HealthChain. Built on Monad Network.
+            <p className="text-gray-600 text-sm">
+              © 2026 FitReward. Your fitness platform.
             </p>
           </div>
         </div>

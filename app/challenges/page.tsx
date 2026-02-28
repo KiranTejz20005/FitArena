@@ -13,7 +13,7 @@ export default function ChallengesPage() {
     description: '',
     category: 'Mindfulness',
     duration: 30,
-    prizePool: 5000,
+    reward: 500,
   })
 
   const filters = ['All', 'Cardio', 'Mindfulness', 'Nutrition', 'Lifestyle']
@@ -23,9 +23,9 @@ export default function ChallengesPage() {
       id: 1,
       icon: '🧘',
       name: '30-Day Yoga Streak',
-      description: 'Complete 20 mins of daily yoga. Verify via photo proof or wearable data.',
+      description: 'Complete 20 mins of daily yoga.',
       category: 'Mindfulness',
-      prizePool: '5,000 MON',
+      reward: '500 Points',
       participants: 42,
       status: 'Active',
       daysLeft: 15,
@@ -34,9 +34,9 @@ export default function ChallengesPage() {
       id: 2,
       icon: '🏃',
       name: '10K Steps Challenge',
-      description: 'Hit 10,000 steps every day for a week. Syncs with Apple Health & Google Fit.',
+      description: 'Hit 10,000 steps every day for a week.',
       category: 'Cardio',
-      prizePool: '12,500 MON',
+      reward: '300 Points',
       participants: 128,
       status: 'Active',
       daysLeft: 7,
@@ -45,9 +45,9 @@ export default function ChallengesPage() {
       id: 3,
       icon: '🥗',
       name: 'Plant-Based February',
-      description: 'Eat plant-based meals for 28 days. Upload meal photos to verify and earn.',
+      description: 'Eat plant-based meals for 28 days.',
       category: 'Nutrition',
-      prizePool: '3,000 MON',
+      reward: '400 Points',
       participants: 15,
       status: 'Active',
       daysLeft: 28,
@@ -56,9 +56,9 @@ export default function ChallengesPage() {
       id: 4,
       icon: '🧘‍♀️',
       name: '5AM Meditation Club',
-      description: 'Wake up and check in before 5:30 AM. Build discipline and earn rewards.',
+      description: 'Wake up and check in before 5:30 AM.',
       category: 'Lifestyle',
-      prizePool: '8,000 MON',
+      reward: '200 Points',
       participants: 200,
       status: 'Active',
       daysLeft: 30,
@@ -67,9 +67,9 @@ export default function ChallengesPage() {
       id: 5,
       icon: '💪',
       name: 'Strength Training Streak',
-      description: '3x weekly strength sessions. Log workouts and earn rewards.',
+      description: '3x weekly strength sessions.',
       category: 'Cardio',
-      prizePool: '6,500 MON',
+      reward: '600 Points',
       participants: 89,
       status: 'Active',
       daysLeft: 21,
@@ -78,9 +78,9 @@ export default function ChallengesPage() {
       id: 6,
       icon: '🥕',
       name: 'Clean Eating Challenge',
-      description: 'No processed foods for 14 days. Track your meals and wins.',
+      description: 'No processed foods for 14 days.',
       category: 'Nutrition',
-      prizePool: '4,000 MON',
+      reward: '400 Points',
       participants: 56,
       status: 'Active',
       daysLeft: 14,
@@ -102,7 +102,7 @@ export default function ChallengesPage() {
       name: formData.name,
       description: formData.description,
       category: formData.category,
-      prizePool: `${formData.prizePool.toLocaleString()} MON`,
+      reward: `${formData.reward} Points`,
       participants: Math.floor(Math.random() * 200) + 10,
       status: 'Active',
       daysLeft: formData.duration,
@@ -115,7 +115,7 @@ export default function ChallengesPage() {
       description: '',
       category: 'Mindfulness',
       duration: 30,
-      prizePool: 5000,
+      reward: 500,
     })
   }
 
@@ -124,36 +124,32 @@ export default function ChallengesPage() {
     : challenges.filter(c => c.category === activeFilter)
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-white">
       {/* Navigation */}
-      <nav className="border-b border-slate-800 bg-slate-950/80 backdrop-blur sticky top-0 z-50">
+      <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:shadow-lg group-hover:shadow-purple-500/50 transition-shadow">
-              ❤️
+            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:bg-gray-800 transition-colors">
+              ⚡
             </div>
-            <span className="text-xl font-bold text-white">HealthChain</span>
+            <span className="text-xl font-bold text-black">FitReward</span>
           </Link>
 
           <div className="flex items-center gap-8">
             <div className="hidden md:flex items-center gap-6">
-              <Link href="/challenges" className="text-white transition-colors font-medium border-b-2 border-purple-500">
+              <Link href="/challenges" className="text-black transition-colors font-medium border-b-2 border-black">
                 Challenges
               </Link>
-              <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/dashboard" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Dashboard
               </Link>
-              <Link href="/leaderboard" className="text-slate-300 hover:text-white transition-colors font-medium">
+              <Link href="/leaderboard" className="text-gray-600 hover:text-black transition-colors font-medium">
                 Leaderboard
               </Link>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="px-3 py-1.5 bg-slate-800 rounded-full flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs text-slate-300 font-medium">Monad Testnet</span>
-              </div>
-              <Button variant="outline" className="border-slate-600 text-white hover:bg-slate-800 hidden sm:inline-flex">
+              <Button className="bg-black text-white hover:bg-gray-800 transition-colors hidden sm:inline-flex">
                 Connect Wallet
               </Button>
             </div>
@@ -162,40 +158,51 @@ export default function ChallengesPage() {
       </nav>
 
       {/* Header */}
-      <section className="py-12 px-6 border-b border-slate-800">
+      <section className="py-12 px-6 border-b border-gray-200">
         <div className="max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6">
+          <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">All Challenges</h1>
-              <p className="text-slate-400">Choose a challenge and start earning crypto rewards</p>
+              <h1 className="text-4xl md:text-5xl font-bold text-black mb-2">All Challenges</h1>
+              <p className="text-gray-600">Pick a challenge and start earning rewards</p>
             </div>
             <Button
               onClick={() => setShowCreateModal(true)}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg flex items-center gap-2 w-full md:w-auto"
+              className="bg-black text-white hover:bg-gray-800 font-bold rounded-lg hidden md:flex items-center gap-2 transition-colors"
             >
               <Plus className="w-5 h-5" />
-              Create Challenge
+              Create
             </Button>
           </div>
         </div>
       </section>
 
+      {/* Mobile Create Button */}
+      <section className="md:hidden py-4 px-6 border-b border-gray-200">
+        <Button
+          onClick={() => setShowCreateModal(true)}
+          className="w-full bg-black text-white hover:bg-gray-800 font-bold rounded-lg flex items-center justify-center gap-2 transition-colors"
+        >
+          <Plus className="w-5 h-5" />
+          Create Challenge
+        </Button>
+      </section>
+
       {/* Filters */}
-      <section className="py-8 px-6 border-b border-slate-800 sticky top-16 z-40 bg-slate-950/80 backdrop-blur">
+      <section className="py-8 px-6 border-b border-gray-200 sticky top-16 z-40 bg-white/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 flex-wrap">
             {filters.map(filter => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
                   activeFilter === filter
-                    ? 'bg-purple-600 text-white'
-                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    ? 'bg-black text-white'
+                    : 'bg-gray-100 text-gray-700 hover:border border-gray-300'
                 }`}
               >
                 {filter}
@@ -214,30 +221,30 @@ export default function ChallengesPage() {
               href={`/challenges/${challenge.id}`}
               className="group"
             >
-              <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-xl p-6 hover:border-slate-600 transition-all hover:shadow-lg hover:shadow-purple-500/10 h-full flex flex-col">
+              <div className="bg-white border border-gray-200 rounded-lg p-6 hover:border-black hover:shadow-md transition-all duration-300 h-full flex flex-col">
                 <div className="flex items-start justify-between mb-4">
                   <div className="text-4xl">{challenge.icon}</div>
-                  <span className="px-3 py-1 bg-slate-700 text-slate-300 text-xs font-semibold rounded-full">
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
                     {challenge.status}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-2">{challenge.name}</h3>
-                <p className="text-slate-400 text-sm mb-4 flex-grow">{challenge.description}</p>
+                <h3 className="text-lg font-bold text-black mb-2">{challenge.name}</h3>
+                <p className="text-gray-600 text-sm mb-4 flex-grow">{challenge.description}</p>
 
-                <div className="flex items-center justify-between pt-4 border-t border-slate-700">
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                   <div>
-                    <div className="text-slate-400 text-xs font-medium">Prize Pool</div>
-                    <div className="text-lg font-bold text-white">{challenge.prizePool}</div>
+                    <div className="text-gray-600 text-xs font-medium">Reward</div>
+                    <div className="text-lg font-bold text-black">{challenge.reward}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-slate-400 text-xs font-medium">{challenge.participants} joined</div>
-                    <div className="text-lg font-bold text-green-400">{challenge.daysLeft}d left</div>
+                    <div className="text-gray-600 text-xs font-medium">{challenge.participants} joined</div>
+                    <div className="text-lg font-bold text-blue-600">{challenge.daysLeft}d</div>
                   </div>
                 </div>
 
                 <Button
-                  className="w-full mt-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-lg group-hover:shadow-lg group-hover:shadow-purple-500/30 transition-all"
+                  className="w-full mt-4 bg-black text-white hover:bg-gray-800 font-bold rounded-lg group-hover:shadow-lg transition-all duration-300"
                 >
                   View Challenge
                 </Button>
@@ -249,41 +256,41 @@ export default function ChallengesPage() {
 
       {/* Create Challenge Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Create New Challenge</h2>
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white border border-gray-200 rounded-lg max-w-md w-full p-8 shadow-lg">
+            <h2 className="text-2xl font-bold text-black mb-6">Create New Challenge</h2>
             
             <form onSubmit={handleCreateChallenge} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Challenge Name</label>
+                <label className="block text-sm font-medium text-black mb-2">Challenge Name</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500"
+                  className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
                   placeholder="e.g., 30-Day Yoga Challenge"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Description</label>
+                <label className="block text-sm font-medium text-black mb-2">Description</label>
                 <textarea
                   required
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 resize-none"
+                  className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-black placeholder-gray-400 focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors resize-none"
                   placeholder="Describe your challenge..."
                   rows={3}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Category</label>
+                <label className="block text-sm font-medium text-black mb-2">Category</label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                  className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-black focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
                 >
                   <option>Mindfulness</option>
                   <option>Cardio</option>
@@ -294,24 +301,24 @@ export default function ChallengesPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Duration (days)</label>
+                  <label className="block text-sm font-medium text-black mb-2">Duration (days)</label>
                   <input
                     type="number"
                     min="1"
                     max="365"
                     value={formData.duration}
                     onChange={(e) => setFormData({...formData, duration: parseInt(e.target.value)})}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-black focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Prize Pool (MON)</label>
+                  <label className="block text-sm font-medium text-black mb-2">Reward (Points)</label>
                   <input
                     type="number"
                     min="100"
-                    value={formData.prizePool}
-                    onChange={(e) => setFormData({...formData, prizePool: parseInt(e.target.value)})}
-                    className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                    value={formData.reward}
+                    onChange={(e) => setFormData({...formData, reward: parseInt(e.target.value)})}
+                    className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-black focus:outline-none focus:border-black focus:ring-1 focus:ring-black transition-colors"
                   />
                 </div>
               </div>
@@ -321,15 +328,15 @@ export default function ChallengesPage() {
                   type="button"
                   variant="outline"
                   onClick={() => setShowCreateModal(false)}
-                  className="flex-1 border-slate-600 text-white hover:bg-slate-700"
+                  className="flex-1 border border-gray-300 text-black hover:bg-gray-100 transition-colors font-semibold"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold"
+                  className="flex-1 bg-black text-white hover:bg-gray-800 font-semibold transition-colors"
                 >
-                  Create Challenge
+                  Create
                 </Button>
               </div>
             </form>
@@ -338,17 +345,17 @@ export default function ChallengesPage() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-950 py-12 px-6 mt-12">
+      <footer className="border-t border-gray-200 bg-white py-12 px-6 mt-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-2 mb-6 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">
-                ❤️
+              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
+                ⚡
               </div>
-              <span className="text-white font-bold">HealthChain</span>
+              <span className="text-black font-bold">FitReward</span>
             </div>
-            <p className="text-slate-400 text-sm">
-              © 2024 HealthChain. Built on Monad Network.
+            <p className="text-gray-600 text-sm">
+              © 2026 FitReward. Your fitness platform.
             </p>
           </div>
         </div>

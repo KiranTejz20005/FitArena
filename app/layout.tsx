@@ -6,8 +6,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'HealthChain - Get Fit, Earn Crypto, Stay Accountable',
-  description: 'Stake tokens to commit to your health goals and earn crypto rewards on the Monad blockchain.',
+  title: 'FitReward - Earn Rewards for Your Fitness Goals',
+  description: 'A minimalistic fitness tracking platform where you can stake, complete challenges, and earn rewards.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased bg-white text-black">
         {children}
       </body>
     </html>
