@@ -56,7 +56,7 @@ export function StakeRewardsForm({ value, onChange }: StakeRewardsFormProps) {
         <div className="relative">
           <Input
             type="number"
-            min="1"
+            min="0.5"
             step="0.01"
             placeholder="10"
             value={value}
@@ -64,7 +64,7 @@ export function StakeRewardsForm({ value, onChange }: StakeRewardsFormProps) {
             className="h-12 py-6 bg-white/5 border-white/10 rounded-xl focus:border-hc-green/50 transition-all text-2xl font-black"
           />
           <div className="absolute right-4 top-1/2 -translate-y-1/2 px-2 py-0.5 rounded bg-hc-green/10 border border-hc-green/20 text-[9px] font-black text-hc-green">
-            MIN 1 MON
+            MIN 0.5 MON
           </div>
         </div>
       </div>

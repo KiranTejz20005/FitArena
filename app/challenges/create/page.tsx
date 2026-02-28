@@ -36,8 +36,8 @@ export default function CreateChallengePage() {
       return
     }
     const stakeNum = parseFloat(stake)
-    if (Number.isNaN(stakeNum) || stakeNum < 1) {
-      setError('Stake must be at least 1 MON')
+    if (Number.isNaN(stakeNum) || stakeNum < 0.5) {
+      setError('Stake must be at least 0.5 MON')
       return
     }
     const days = parseInt(duration, 10)
@@ -57,7 +57,7 @@ export default function CreateChallengePage() {
   }
 
   const loading = isPending || isConfirming
-  const valid = form.name.trim().length > 0 && parseFloat(form.stakeAmount) >= 1 && form.durationDays.length > 0
+  const valid = form.name.trim().length > 0 && parseFloat(form.stakeAmount) >= 0.5 && form.durationDays.length > 0
 
   return (
     <div className="pb-20 min-w-0">
