@@ -60,6 +60,10 @@ export interface Challenge {
   progress: number
   iconType?: 'activity' | 'zap' | 'trophy' | 'flame' | 'plus' | 'target'
   gradient?: string
+  /** Dummy: people who quit (for display) */
+  peopleQuit?: number
+  /** Dummy: estimated profit if you complete (e.g. "~12.5 MON") */
+  profitIfComplete?: string
 }
 
 export interface Stat {

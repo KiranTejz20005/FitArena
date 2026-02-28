@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CheckCircle2, Trophy, Clock, Share2, PlusCircle, Activity } from 'lucide-react'
+import { CheckCircle2, Trophy, Share2, PlusCircle, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface VerificationOptionsProps {

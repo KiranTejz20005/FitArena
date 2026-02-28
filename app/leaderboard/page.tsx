@@ -3,11 +3,17 @@
 import Link from 'next/link'
 import { useAllChallenges } from '@/hooks/useHealthChain'
 import { formatChallengeFromChain, formatChallengeForCard } from '@/lib/challenge-utils'
+import { LEADERBOARD as DUMMY_LEADERBOARD } from '@/lib/mock-data'
+import { CHALLENGES as DUMMY_CHALLENGES } from '@/lib/mock-data'
+import { LeaderboardSidebar } from '@/components/challenges/leaderboard-sidebar'
 import { ArrowLeft, Crown, Trophy } from 'lucide-react'
 
 export default function LeaderboardPage() {
   const { challenges, isLoading } = useAllChallenges()
-  const displayChallenges = challenges.map((c) => formatChallengeForCard(formatChallengeFromChain(c.id, c)))
+  const displayChallenges =
+    challenges.length > 0
+      ? challenges.map((c) => formatChallengeForCard(formatChallengeFromChain(c.id, c)))
+      : DUMMY_CHALLENGES
 
   return (
     <div className="min-h-screen pb-24">
@@ -21,38 +27,47 @@ export default function LeaderboardPage() {
             <h1 className="text-4xl md:text-5xl font-black text-white uppercase italic tracking-tight">Leaderboard</h1>
             <Crown className="w-8 h-8 text-hc-amber" />
           </div>
-          <p className="text-white/50">View rankings per challenge. Open a challenge to see its leaderboard.</p>
+          <p className="text-white/50">Top performers and per-challenge rankings.</p>
         </div>
       </section>
 
-      <section className="py-12 px-6 max-w-4xl mx-auto">
-        {isLoading ? (
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-20 rounded-xl bg-white/5 border border-white/10 animate-pulse" />
-            ))}
+      <section className="py-12 px-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2 space-y-6">
+            <h2 className="text-xl font-black uppercase italic tracking-tight text-white">Challenges</h2>
+            {isLoading ? (
+              <div className="space-y-3">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="h-20 rounded-xl bg-white/5 border border-white/10 animate-pulse" />
+                ))}
+              </div>
+            ) : displayChallenges.length === 0 ? (
+              <div className="text-center py-20 text-white/50 glass rounded-xl border border-white/5">
+                <Trophy className="w-12 h-12 mx-auto mb-4 text-white/20" />
+                <p className="font-bold mb-2">No challenges yet</p>
+                <p className="text-sm">Create or join challenges to see leaderboards.</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {displayChallenges.map((challenge) => (
+                  <Link key={challenge.id} href={`/challenges/${challenge.id}`}>
+                    <div className="glass p-6 border-white/5 hover:border-fuchsia-500/30 rounded-xl transition-colors flex items-center justify-between">
+                      <div>
+                        <h3 className="text-lg font-bold text-white">{challenge.name}</h3>
+                        <p className="text-sm text-white/50">{challenge.participants} participants · {challenge.prizePool} pool</p>
+                      </div>
+                      <span className="text-fuchsia-400 font-bold text-sm uppercase tracking-widest">View leaderboard</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
-        ) : displayChallenges.length === 0 ? (
-          <div className="text-center py-20 text-white/50 glass rounded-xl border border-white/5">
-            <Trophy className="w-12 h-12 mx-auto mb-4 text-white/20" />
-            <p className="font-bold mb-2">No challenges yet</p>
-            <p className="text-sm">Create or join challenges to see leaderboards.</p>
+          <div>
+            <h2 className="text-xl font-black uppercase italic tracking-tight text-white mb-6">Top performers</h2>
+            <LeaderboardSidebar entries={DUMMY_LEADERBOARD} />
           </div>
-        ) : (
-          <div className="space-y-3">
-            {displayChallenges.map((challenge) => (
-              <Link key={challenge.id} href={`/challenges/${challenge.id}`}>
-                <div className="glass p-6 border-white/5 hover:border-fuchsia-500/30 rounded-xl transition-colors flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-bold text-white">{challenge.name}</h3>
-                    <p className="text-sm text-white/50">{challenge.participants} participants · {challenge.prizePool} pool</p>
-                  </div>
-                  <span className="text-fuchsia-400 font-bold text-sm uppercase tracking-widest">View leaderboard</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+        </div>
       </section>
     </div>
   )

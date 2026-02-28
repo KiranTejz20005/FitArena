@@ -5,13 +5,12 @@ import { useAccount } from 'wagmi'
 import { useAllChallenges } from '@/hooks/useHealthChain'
 import { useParticipant } from '@/hooks/useHealthChain'
 import { formatChallengeFromChain } from '@/lib/challenge-utils'
+import { DUMMY_MY_CHALLENGES } from '@/lib/mock-data'
 import { ArrowLeft, Zap, Target, TrendingUp } from 'lucide-react'
-
-const MAX = 30
 
 export default function DashboardPage() {
   const { address } = useAccount()
-  const { challenges, count, isLoading } = useAllChallenges()
+  const { challenges, isLoading } = useAllChallenges()
 
   const p0 = useParticipant(0, address ?? undefined)
   const p1 = useParticipant(1, address ?? undefined)
@@ -63,10 +62,11 @@ export default function DashboardPage() {
     })
     .filter(Boolean) as { id: number; name: string; progress: number; daysLeft: number; checkInCount: number; durationDays: number; hasCompleted: boolean }[]
 
+  const displayChallenges = myChallenges.length > 0 ? myChallenges : (address && !isLoading ? DUMMY_MY_CHALLENGES.map((c) => ({ id: parseInt(c.id, 10), name: c.name, progress: c.progress, daysLeft: c.daysLeft, checkInCount: c.checkIns, durationDays: c.durationDays, hasCompleted: false })) : [])
   const stats = [
-    { label: 'Active Challenges', value: String(myChallenges.length), icon: Target, color: 'text-fuchsia-400' },
-    { label: 'Total Check-ins', value: String(myChallenges.reduce((s, c) => s + c.checkInCount, 0)), icon: Zap, color: 'text-hc-green' },
-    { label: 'Challenges Completed', value: String(myChallenges.filter((c) => c.hasCompleted).length), icon: TrendingUp, color: 'text-hc-amber' },
+    { label: 'Active Challenges', value: String(displayChallenges.length), icon: Target, color: 'text-fuchsia-400' },
+    { label: 'Total Check-ins', value: String(displayChallenges.reduce((s, c) => s + (c.checkInCount ?? 0), 0)), icon: Zap, color: 'text-hc-green' },
+    { label: 'Challenges Completed', value: String(displayChallenges.filter((c) => c.hasCompleted).length), icon: TrendingUp, color: 'text-hc-amber' },
   ]
 
   return (
@@ -115,7 +115,7 @@ export default function DashboardPage() {
 
             <div>
               <h2 className="text-2xl font-black text-white mb-6 uppercase italic tracking-tight">Active Challenges</h2>
-              {myChallenges.length === 0 ? (
+              {displayChallenges.length === 0 ? (
                 <div className="text-center py-16 text-white/50 glass rounded-xl border border-white/5">
                   <p className="font-bold mb-2">No challenges joined yet</p>
                   <p className="text-sm mb-4">Join a challenge from the Arena to see it here.</p>
@@ -125,7 +125,10 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {myChallenges.map((challenge) => (
+                  {myChallenges.length === 0 && (
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/40 mb-2">Demo — connect & join challenges to see your real progress</p>
+                  )}
+                  {displayChallenges.map((challenge) => (
                     <Link key={challenge.id} href={`/challenges/${challenge.id}`}>
                       <div className="glass p-6 border-white/5 hover:border-fuchsia-500/30 rounded-xl transition-colors duration-300">
                         <div className="flex items-center justify-between mb-4">

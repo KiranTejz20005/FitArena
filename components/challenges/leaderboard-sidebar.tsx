@@ -10,7 +10,7 @@ export function LeaderboardSidebar({ entries }: LeaderboardSidebarProps) {
         <div className="glass p-6 border-white/5">
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-bold italic uppercase tracking-tight">Leaderboard</h3>
-                <Link href="#" className="text-[9px] font-black uppercase tracking-widest text-fuchsia-400 hover:text-fuchsia-300">View All</Link>
+                <Link href="/leaderboard" className="text-[9px] font-black uppercase tracking-widest text-fuchsia-400 hover:text-fuchsia-300">View All</Link>
             </div>
 
             <div className="space-y-4">

@@ -26,8 +26,8 @@ export const monadTestnet = defineChain({
   testnet: true,
 })
 
-// WalletConnect requires a non-empty projectId. Use env or a placeholder so the app loads (get one at cloud.walletconnect.com).
-const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || 'e806f081b29f56b0637633730693b87a'
+// WalletConnect requires a non-empty projectId. Set NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID in .env (get one at cloud.walletconnect.com).
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? 'e806f081b29f56b0637633730693b87a'
 
 export const config = getDefaultConfig({
   appName: 'FitArena',

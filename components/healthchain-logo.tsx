@@ -7,7 +7,7 @@ export function HealthChainLogo({ className = "" }: { className?: string }) {
         <Heart className="w-5 h-5 fill-current" />
       </div>
       <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">
-        HealthChain
+        FitArena
       </span>
     </div>
   )

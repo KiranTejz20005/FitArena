@@ -6,13 +6,18 @@ import { parseEther } from 'viem'
 import { CONTRACT_ADDRESS, CONTRACT_ABI, isContractConfigured } from '@/lib/contract'
 import type { ChainChallenge, ChainParticipant } from '@/types'
 
+/** Strip " MON" suffix so parseEther gets a valid decimal string (e.g. "1.0000 MON" -> "1.0000"). */
+function toEtherString(value: string): string {
+  return value.replace(/\s*MON\s*$/i, '').trim() || '0'
+}
+
 // ============================================
 // Write hook – create, join, check-in, claim
 // ============================================
 
 export function useHealthChain() {
   const { address, isConnected } = useAccount()
-  const { writeContractAsync, data: hash, isPending, error } = useWriteContract()
+  const { writeContractAsync, isPending, error } = useWriteContract()
   const [lastTxHash, setLastTxHash] = useState<`0x${string}` | undefined>()
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -24,7 +29,7 @@ export function useHealthChain() {
       address: CONTRACT_ADDRESS,
       abi: CONTRACT_ABI,
       functionName: 'createChallenge',
-      args: [name, parseEther(stakeAmount), BigInt(durationDays)],
+      args: [name, parseEther(toEtherString(stakeAmount)), BigInt(durationDays)],
     })
     setLastTxHash(tx)
     return tx
@@ -36,7 +41,7 @@ export function useHealthChain() {
       abi: CONTRACT_ABI,
       functionName: 'joinChallenge',
       args: [BigInt(challengeId)],
-      value: parseEther(stakeAmount),
+      value: parseEther(toEtherString(stakeAmount)),
     })
     setLastTxHash(tx)
     return tx

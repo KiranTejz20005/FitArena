@@ -9,6 +9,7 @@ import { ChallengeProgressCalendar } from '@/components/challenges/challenge-pro
 import { ChallengeLeaderboard } from '@/components/challenges/challenge-leaderboard'
 import { useChallenge, useParticipant, useHealthChain } from '@/hooks/useHealthChain'
 import { formatChallengeFromChain, getCurrentDay } from '@/lib/challenge-utils'
+import { CHALLENGES as DUMMY_CHALLENGES } from '@/lib/mock-data'
 import {
   ArrowLeft,
   Users,
@@ -18,6 +19,8 @@ import {
   Lock,
   Activity,
   Rocket,
+  UserMinus,
+  TrendingUp,
 } from 'lucide-react'
 export default function ChallengePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -25,7 +28,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   const isInvalidId = Number.isNaN(challengeId) || challengeId < 0
 
   const { address } = useAccount()
-  const { joinChallenge, claimReward, isPending, isConfirming } = useHealthChain()
+  const { joinChallenge, claimReward, checkIn, isPending, isConfirming } = useHealthChain()
   const { challenge: rawChallenge, isLoading: challengeLoading } = useChallenge(challengeId)
   const { participant, refetch: refetchParticipant } = useParticipant(challengeId, address)
 
@@ -39,7 +42,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   const hasCompleted = participant?.hasCompleted ?? false
   const rewardClaimed = participant?.rewardClaimed ?? false
   const currentDay = challenge && rawChallenge ? getCurrentDay(rawChallenge.startTime, challenge.durationDays) : 0
-  const canCheckIn = isParticipant && !hasCompleted && currentDay >= 1 && currentDay <= challenge.durationDays
+  const canCheckIn = isParticipant && !hasCompleted && currentDay >= 1 && challenge != null && currentDay <= challenge.durationDays
 
   const handleJoin = async () => {
     if (!challenge || !address) return
@@ -94,6 +97,10 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   }
 
   const rewardEstimate = challenge.participantCount > 0 ? `~${challenge.stakeAmount}` : '0 MON'
+  const dummyOverlay = DUMMY_CHALLENGES.find((c) => c.id === id)
+  const peopleQuit = dummyOverlay?.peopleQuit ?? 0
+  const profitIfComplete = dummyOverlay?.profitIfComplete ?? rewardEstimate
+  const inTheRace = challenge.participantCount - peopleQuit
 
   return (
     <div className="pb-24">
@@ -140,7 +147,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {[
             { label: 'Prize Pool', value: challenge.prizePool, icon: <Trophy className="w-4 h-4 text-fuchsia-400" /> },
-            { label: 'Participants', value: challenge.participantCount, suffix: '', icon: <Users className="w-4 h-4 text-rose-400" /> },
+            { label: 'In the race', value: inTheRace, suffix: '', icon: <Users className="w-4 h-4 text-rose-400" /> },
             { label: 'Your Stake', value: challenge.stakeAmount, icon: <Lock className="w-4 h-4 text-hc-amber" /> },
             { label: 'Days Left', value: challenge.daysLeft, suffix: 'Days', icon: <Clock className="w-4 h-4 text-hc-green" /> },
           ].map((stat, i) => (
@@ -157,6 +164,21 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
           ))}
         </div>
 
+        {(peopleQuit > 0 || profitIfComplete) && (
+          <div className="flex flex-wrap gap-4 mb-8">
+            {peopleQuit > 0 && (
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                <UserMinus className="w-4 h-4 text-white/50" />
+                <span className="text-sm text-white/70"><span className="font-bold text-white">{peopleQuit}</span> quit — their stake stays in the pool</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-hc-green/10 border border-hc-green/20">
+              <TrendingUp className="w-4 h-4 text-hc-green" />
+              <span className="text-sm text-white/80">Profit if you complete: <span className="font-bold text-hc-green">{profitIfComplete}</span></span>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <div className="lg:col-span-2">
             {isParticipant ? (
@@ -165,6 +187,8 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
                 userAddress={address ?? undefined}
                 startTime={rawChallenge!.startTime}
                 durationDays={challenge.durationDays}
+                onCheckIn={async (day) => { await checkIn(challengeId, day); refetchParticipant?.() }}
+                refetch={refetchParticipant}
               />
             ) : (
               <ProgressCalendar
