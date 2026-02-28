@@ -22,8 +22,8 @@ export function ChallengeCard({ challenge, variant = 'grid' }: ChallengeCardProp
 
     if (variant === 'list') {
         return (
-            <div className="glass p-1 border-white/5 group hover:border-white/20 transition-all overflow-hidden">
-                <div className="p-6 h-full flex flex-col bg-zinc-950/20 rounded-xl">
+            <div className="glass p-1 border-white/5 group hover:border-white/20 transition-all overflow-hidden min-w-0">
+                <div className="p-4 sm:p-6 h-full flex flex-col bg-zinc-950/20 rounded-xl">
                     <div className="flex justify-between items-start mb-6">
                         <div className="p-3 rounded-2xl bg-white/5 border border-white/10">
                             <Icon className="w-4 h-4 text-fuchsia-400" />
@@ -33,7 +33,7 @@ export function ChallengeCard({ challenge, variant = 'grid' }: ChallengeCardProp
                         </span>
                     </div>
 
-                    <h3 className="text-xl font-bold mb-2">{challenge.name}</h3>
+                    <h3 className="text-lg sm:text-xl font-bold mb-2 break-words">{challenge.name}</h3>
                     <p className="text-white/50 text-xs mb-10 line-clamp-2 leading-relaxed">
                         {challenge.description ?? 'Stake MON and check in daily to complete.'}
                     </p>

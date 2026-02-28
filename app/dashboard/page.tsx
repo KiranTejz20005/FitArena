@@ -70,19 +70,19 @@ export default function DashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen pb-24">
-      <section className="py-12 px-6 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6">
-            <ArrowLeft className="w-4 h-4" />
+    <div className="min-h-screen pb-24 min-w-0">
+      <section className="py-8 sm:py-12 px-4 sm:px-6 border-b border-white/10">
+        <div className="max-w-7xl mx-auto min-w-0">
+          <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-4 sm:mb-6">
+            <ArrowLeft className="w-4 h-4 shrink-0" />
             Back
           </Link>
-          <h1 className="text-4xl md:text-5xl font-black text-white mb-2 uppercase italic tracking-tight">Your Dashboard</h1>
-          <p className="text-white/50">Track your progress and achievements</p>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white mb-2 uppercase italic tracking-tight">Your Dashboard</h1>
+          <p className="text-white/50 text-sm sm:text-base">Track your progress and achievements</p>
         </div>
       </section>
 
-      <section className="py-12 px-6 max-w-7xl mx-auto">
+      <section className="py-8 sm:py-12 px-4 sm:px-6 max-w-7xl mx-auto min-w-0">
         {!address ? (
           <div className="text-center py-20 text-white/50">
             <p className="text-lg font-bold mb-2">Connect your wallet</p>
@@ -113,8 +113,8 @@ export default function DashboardPage() {
               })}
             </div>
 
-            <div>
-              <h2 className="text-2xl font-black text-white mb-6 uppercase italic tracking-tight">Active Challenges</h2>
+            <div className="min-w-0">
+              <h2 className="text-xl sm:text-2xl font-black text-white mb-4 sm:mb-6 uppercase italic tracking-tight">Active Challenges</h2>
               {displayChallenges.length === 0 ? (
                 <div className="text-center py-16 text-white/50 glass rounded-xl border border-white/5">
                   <p className="font-bold mb-2">No challenges joined yet</p>

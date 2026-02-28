@@ -60,17 +60,17 @@ export default function CreateChallengePage() {
   const valid = form.name.trim().length > 0 && parseFloat(form.stakeAmount) >= 1 && form.durationDays.length > 0
 
   return (
-    <div className="pb-20">
-      <main className="max-w-4xl mx-auto px-6 pt-12">
-        <div className="mb-16">
-          <Link href="/challenges" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-fuchsia-400 transition-colors mb-10">
-            <ArrowLeft className="w-4 h-4" /> Back to Arena
+    <div className="pb-20 min-w-0">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 min-w-0">
+        <div className="mb-10 sm:mb-16">
+          <Link href="/challenges" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-fuchsia-400 transition-colors mb-6 sm:mb-10">
+            <ArrowLeft className="w-4 h-4 shrink-0" /> Back to Arena
           </Link>
-          <h1 className="text-6xl md:text-7xl font-black uppercase italic tracking-tight mb-4">Launch Arena</h1>
-          <p className="text-white/40 text-lg font-medium">Design your battlefield. Set the stakes. Invite the squad.</p>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase italic tracking-tight mb-3 sm:mb-4">Launch Arena</h1>
+          <p className="text-white/40 text-sm sm:text-lg font-medium">Design your battlefield. Set the stakes. Invite the squad.</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-12">
+        <div className="grid grid-cols-1 gap-8 sm:gap-12">
           <div className="space-y-12">
             <section>
               <div className="flex items-center gap-3 mb-6">

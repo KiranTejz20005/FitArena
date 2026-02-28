@@ -30,33 +30,33 @@ export default function HomePage() {
   )
 
   return (
-    <div className="pb-20">
+    <div className="pb-16 sm:pb-20 min-w-0">
       <HeroSection />
 
-      <section className="px-6 mb-32">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="px-4 sm:px-6 mb-16 sm:mb-24 md:mb-32">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {stats.map((stat, i) => (
             <StatCard key={i} stat={stat} />
           ))}
         </div>
       </section>
 
-      <section className="px-6 pb-40">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div>
-              <h2 className="text-4xl font-black mb-2 italic uppercase tracking-tight">Active Challenges</h2>
+      <section className="px-4 sm:px-6 pb-16 sm:pb-24">
+        <div className="max-w-7xl mx-auto min-w-0">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4">
+            <div className="min-w-0">
+              <h2 className="text-2xl sm:text-4xl font-black mb-2 italic uppercase tracking-tight">Active Challenges</h2>
             </div>
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
               {[1, 2].map((i) => (
                 <div key={i} className="h-48 rounded-xl bg-white/5 border border-white/10 animate-pulse" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
               {displayChallenges.map((challenge) => (
                 <ChallengeCard key={challenge.id} challenge={challenge} variant="list" />
               ))}
@@ -65,10 +65,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <footer className="px-6 py-20 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col items-center gap-8">
+      <footer className="px-4 sm:px-6 py-6 sm:py-8 border-t border-white/5">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
           <HealthChainLogo />
-          <p className="text-white/30 text-[10px] font-medium uppercase tracking-[0.2em]">
+          <span className="hidden sm:inline text-white/20">·</span>
+          <p className="text-white/40 text-[10px] font-medium uppercase tracking-[0.2em]">
             © 2026 FitArena. Built on Monad Network.
           </p>
         </div>

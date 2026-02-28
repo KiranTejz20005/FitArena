@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { useParticipantCount, useParticipantAt, useParticipant } from '@/hooks/useHealthChain'
 import { LeaderboardSidebar } from '@/components/challenges/leaderboard-sidebar'
 import { shortenAddress } from '@/lib/utils'
+import { DUMMY_CHALLENGE_LEADERBOARD } from '@/lib/mock-data'
 import type { LeaderboardEntry } from '@/types'
 
 const MAX_LEADERBOARD = 10
@@ -58,13 +59,15 @@ export function ChallengeLeaderboard({ challengeId, durationDays, currentUserAdd
     }))
   }, [count, addrs, participants, durationDays, currentUserAddress])
 
+  const dummyEntries = useMemo((): LeaderboardEntry[] => {
+    return DUMMY_CHALLENGE_LEADERBOARD.map((e) => ({
+      ...e,
+      isUser: e.name === 'You' && !!currentUserAddress,
+    }))
+  }, [currentUserAddress])
+
   if (count === 0) {
-    return (
-      <div className="glass p-6 border-white/5">
-        <h3 className="text-lg font-bold italic uppercase tracking-tight mb-4">Leaderboard</h3>
-        <p className="text-white/40 text-sm">No participants yet.</p>
-      </div>
-    )
+    return <LeaderboardSidebar entries={dummyEntries} />
   }
 
   return <LeaderboardSidebar entries={entries} />

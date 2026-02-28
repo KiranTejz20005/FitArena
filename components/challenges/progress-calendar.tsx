@@ -16,10 +16,10 @@ interface ProgressCalendarProps {
 
 export function ProgressCalendar({ days, monthName, onDayClick, streak }: ProgressCalendarProps) {
     return (
-        <div className="glass p-6 border-white/5">
-            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-                <div>
-                    <h3 className="text-xl font-bold mb-1">Progress Calendar</h3>
+        <div className="glass p-4 sm:p-6 border-white/5 min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 flex-wrap gap-2 sm:gap-3">
+                <div className="min-w-0">
+                    <h3 className="text-base sm:text-xl font-bold mb-1">Progress Calendar</h3>
                     <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest flex items-center gap-2">
                         Keep the streak alive
                         {streak !== undefined && streak > 0 && (
@@ -34,7 +34,7 @@ export function ProgressCalendar({ days, monthName, onDayClick, streak }: Progre
                 </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
                 {days.map((d) => {
                     const canClick = onDayClick && (d.status === 'today' || (d.status === 'upcoming' && d.day < 32))
                     return (
@@ -55,7 +55,7 @@ export function ProgressCalendar({ days, monthName, onDayClick, streak }: Progre
                 })}
             </div>
 
-            <div className="mt-6 flex items-center gap-6">
+            <div className="mt-4 sm:mt-6 flex flex-wrap items-center gap-4 sm:gap-6">
                 <div className="flex items-center gap-3">
                     <div className="w-2.5 h-2.5 rounded-full bg-purple-500" />
                     <span className="text-[9px] font-black uppercase tracking-widest text-white/50">Completed</span>

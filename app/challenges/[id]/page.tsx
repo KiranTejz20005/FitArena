@@ -9,7 +9,7 @@ import { ChallengeProgressCalendar } from '@/components/challenges/challenge-pro
 import { ChallengeLeaderboard } from '@/components/challenges/challenge-leaderboard'
 import { useChallenge, useParticipant, useHealthChain } from '@/hooks/useHealthChain'
 import { formatChallengeFromChain, getCurrentDay } from '@/lib/challenge-utils'
-import { CHALLENGES as DUMMY_CHALLENGES } from '@/lib/mock-data'
+import { CHALLENGES as DUMMY_CHALLENGES, DUMMY_QUIT_USERS } from '@/lib/mock-data'
 import {
   ArrowLeft,
   Users,
@@ -104,60 +104,60 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
   const quitDisplay = Math.min(peopleQuit, committed)
 
   return (
-    <div className="pb-24">
-      <main className="max-w-7xl mx-auto px-6 pt-8">
-        <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-white/30 mb-8">
-          <Link href="/challenges" className="hover:text-white flex items-center gap-2">
+    <div className="pb-28 sm:pb-24 min-w-0">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 min-w-0">
+        <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-white/30 mb-6 sm:mb-8 min-w-0 overflow-hidden">
+          <Link href="/challenges" className="hover:text-white flex items-center gap-2 shrink-0">
             <ArrowLeft className="w-3 h-3" /> Back
           </Link>
-          <span className="w-1 h-1 bg-white/20 rounded-full" />
-          <Link href="/challenges" className="hover:text-white">Challenges</Link>
-          <span className="w-1 h-1 bg-white/20 rounded-full" />
-          <span className="text-white/60">{challenge.name}</span>
+          <span className="w-1 h-1 bg-white/20 rounded-full shrink-0" />
+          <Link href="/challenges" className="hover:text-white shrink-0">Challenges</Link>
+          <span className="w-1 h-1 bg-white/20 rounded-full shrink-0" />
+          <span className="text-white/60 truncate">{challenge.name}</span>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8 items-start mb-12">
-          <div className="p-4 rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl">
-            <Activity className="w-8 h-8 text-purple-400" />
+        <div className="flex flex-col md:flex-row gap-6 sm:gap-8 items-start mb-8 sm:mb-12">
+          <div className="p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl shrink-0">
+            <Activity className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" />
           </div>
-          <div className="flex-grow">
-            <div className="flex items-center gap-2.5 mb-3">
+          <div className="flex-grow min-w-0">
+            <div className="flex items-center gap-2.5 mb-2 sm:mb-3">
               <div className="px-2 py-0.5 rounded-full bg-hc-green/10 border border-hc-green/20 text-[9px] font-black uppercase tracking-widest text-hc-green flex items-center gap-1.5">
                 <Zap className="w-3 h-3 fill-current" /> Active
               </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-black mb-4 tracking-tight uppercase italic">{challenge.name}</h1>
-            <p className="text-base text-white/50 max-w-2xl leading-relaxed">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-black mb-3 sm:mb-4 tracking-tight uppercase italic break-words">{challenge.name}</h1>
+            <p className="text-sm sm:text-base text-white/50 max-w-2xl leading-relaxed">
               {challenge.durationDays}-day challenge. Check in every day to complete and split the prize pool.
             </p>
           </div>
-          <div className="flex flex-col gap-4 md:text-right">
-            <div className="border-l-2 md:border-l-0 md:border-r-2 border-fuchsia-500/30 pl-4 md:pl-0 md:pr-4 py-1.5">
+          <div className="flex flex-row md:flex-col gap-4 md:text-right w-full md:w-auto shrink-0">
+            <div className="border-l-2 md:border-l-0 md:border-r-2 border-fuchsia-500/30 pl-4 md:pl-0 md:pr-4 py-1.5 flex-1">
               <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-0.5">Entry Fee</div>
-              <div className="text-2xl font-black tracking-tight">
+              <div className="text-xl sm:text-2xl font-black tracking-tight">
                 {challenge.stakeAmount} <span className="text-xs font-bold text-white/30 uppercase ml-1">MON</span>
               </div>
             </div>
-            <div className="border-l-2 md:border-l-0 md:border-r-2 border-hc-green/30 pl-4 md:pl-0 md:pr-4 py-1.5">
+            <div className="border-l-2 md:border-l-0 md:border-r-2 border-hc-green/30 pl-4 md:pl-0 md:pr-4 py-1.5 flex-1">
               <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-0.5">Reward</div>
-              <div className="text-2xl font-black tracking-tight text-hc-green">{rewardEstimate}</div>
+              <div className="text-xl sm:text-2xl font-black tracking-tight text-hc-green">{rewardEstimate}</div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-12">
           {[
             { label: 'Prize Pool', value: challenge.prizePool, icon: <Trophy className="w-4 h-4 text-fuchsia-400" /> },
             { label: 'Committed', value: committed, suffix: '', icon: <Users className="w-4 h-4 text-rose-400" /> },
             { label: 'Quit', value: quitDisplay, suffix: '', icon: <UserMinus className="w-4 h-4 text-white/50" /> },
             { label: 'Days Left', value: challenge.daysLeft, suffix: 'Days', icon: <Clock className="w-4 h-4 text-hc-green" /> },
           ].map((stat, i) => (
-            <div key={i} className="glass p-6 border-white/5 relative group hover:border-white/10 transition-colors">
-              <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
+            <div key={i} className="glass p-4 sm:p-6 border-white/5 relative group hover:border-white/10 transition-colors min-w-0">
+              <div className="absolute top-3 right-3 sm:top-4 sm:right-4 opacity-20 group-hover:opacity-40 transition-opacity">
                 {stat.icon}
               </div>
-              <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-3">{stat.label}</div>
-              <div className="text-2xl font-black tracking-tight">
+              <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-2 sm:mb-3">{stat.label}</div>
+              <div className="text-lg sm:text-2xl font-black tracking-tight break-all">
                 {stat.value}
                 {stat.suffix && <span className="text-[10px] font-bold text-white/20 ml-1.5">{stat.suffix}</span>}
               </div>
@@ -166,22 +166,31 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
         </div>
 
         {(peopleQuit > 0 || profitIfComplete) && (
-          <div className="flex flex-wrap gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
             {peopleQuit > 0 && (
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
-                <UserMinus className="w-4 h-4 text-white/50" />
-                <span className="text-sm text-white/70"><span className="font-bold text-white">{peopleQuit}</span> quit — their stake stays in the pool</span>
+              <div className="flex flex-col gap-2 px-3 sm:px-4 py-3 rounded-xl bg-white/5 border border-white/10 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <UserMinus className="w-4 h-4 text-white/50 shrink-0" />
+                  <span className="text-xs sm:text-sm text-white/70"><span className="font-bold text-white">{peopleQuit}</span> quit — their stake stays in the pool</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5 mt-1">
+                  {DUMMY_QUIT_USERS.slice(0, peopleQuit).map((name, i) => (
+                    <span key={i} className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-white/5 text-white/50 border border-white/10">
+                      {name}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-hc-green/10 border border-hc-green/20">
-              <TrendingUp className="w-4 h-4 text-hc-green" />
-              <span className="text-sm text-white/80">Profit if you complete: <span className="font-bold text-hc-green">{profitIfComplete}</span></span>
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl bg-hc-green/10 border border-hc-green/20 min-w-0">
+              <TrendingUp className="w-4 h-4 text-hc-green shrink-0" />
+              <span className="text-xs sm:text-sm text-white/80">Profit if you complete: <span className="font-bold text-hc-green">{profitIfComplete}</span></span>
             </div>
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-10 items-start">
+          <div className="lg:col-span-2 min-w-0">
             {isParticipant ? (
               <ChallengeProgressCalendar
                 challengeId={challengeId}
@@ -201,7 +210,7 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
               />
             )}
           </div>
-          <div>
+          <div className="lg:min-w-[280px] w-full">
             <ChallengeLeaderboard
               challengeId={challengeId}
               durationDays={challenge.durationDays}
@@ -211,13 +220,13 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
         </div>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 z-40 px-6 pb-6 pt-10 pointer-events-none">
-        <div className="max-w-7xl mx-auto glass p-4 border-white/10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 sm:px-6 pb-4 sm:pb-6 pt-8 sm:pt-10 pointer-events-none">
+        <div className="max-w-7xl mx-auto glass p-3 sm:p-4 border-white/10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 overflow-hidden min-w-0">
           <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-fuchsia-500/50 to-transparent" />
 
-          <div>
+          <div className="min-w-0 w-full sm:w-auto text-center sm:text-left">
             <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-0.5">Ready to commit?</div>
-            <div className="text-lg font-black">
+            <div className="text-sm sm:text-lg font-black break-words">
               {!isParticipant ? (
                 <>
                   Stake <span className="text-fuchsia-400">{challenge.stakeAmount}</span>{' '}
@@ -243,16 +252,16 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
             {!address ? (
-              <Button disabled className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest">
+              <Button disabled className="btn-primary h-11 sm:h-12 px-4 sm:px-8 text-xs sm:text-sm font-black rounded-xl uppercase tracking-widest w-full sm:w-auto">
                 Connect wallet to join
               </Button>
             ) : !isParticipant ? (
               <Button
                 onClick={handleJoin}
                 disabled={isPending || isConfirming}
-                className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest group"
+                className="btn-primary h-11 sm:h-12 px-4 sm:px-8 text-xs sm:text-sm font-black rounded-xl uppercase tracking-widest group w-full sm:w-auto"
               >
                 {isPending || isConfirming ? 'Confirm in wallet...' : `Join — Stake ${challenge.stakeAmount}`}
               </Button>
@@ -260,15 +269,15 @@ export default function ChallengePage({ params }: { params: Promise<{ id: string
               <Button
                 onClick={handleClaim}
                 disabled={isPending || isConfirming}
-                className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest"
+                className="btn-primary h-11 sm:h-12 px-4 sm:px-8 text-xs sm:text-sm font-black rounded-xl uppercase tracking-widest w-full sm:w-auto"
               >
                 {isPending || isConfirming ? 'Confirming...' : 'Claim Reward'}
               </Button>
             ) : canCheckIn ? (
-              <Link href={`/challenges/${id}/check-in`}>
-                <Button className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest group">
+              <Link href={`/challenges/${id}/check-in`} className="w-full sm:w-auto">
+                <Button className="btn-primary h-11 sm:h-12 px-4 sm:px-8 text-xs sm:text-sm font-black rounded-xl uppercase tracking-widest group w-full sm:w-auto">
                   Verify Daily Progress
-                  <Rocket className="w-4 h-4 ml-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <Rocket className="w-4 h-4 ml-2 sm:ml-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform shrink-0" />
                 </Button>
               </Link>
             ) : null}

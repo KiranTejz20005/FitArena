@@ -7,13 +7,13 @@ interface LeaderboardSidebarProps {
 
 export function LeaderboardSidebar({ entries }: LeaderboardSidebarProps) {
     return (
-        <div className="glass p-6 border-white/5">
-            <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-bold italic uppercase tracking-tight">Leaderboard</h3>
+        <div className="glass p-4 sm:p-5 border border-white/10 rounded-xl shadow-lg min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-bold italic uppercase tracking-tight text-white">Leaderboard</h3>
                 <Link href="/leaderboard" className="text-[9px] font-black uppercase tracking-widest text-fuchsia-400 hover:text-fuchsia-300">View All</Link>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
                 {entries.map((user, i) => (
                     <div key={i} className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${user.isUser ? 'bg-fuchsia-500/5 border-fuchsia-500/20 shadow-lg shadow-fuchsia-500/10' : 'bg-transparent border-transparent hover:bg-white/5'}`}>
                         <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black ${i === 0 ? 'bg-hc-amber text-black' : 'bg-white/5 text-white/40 border border-white/10'}`}>

@@ -164,6 +164,32 @@ export const LEADERBOARD: LeaderboardEntry[] = [
   { name: '0x4c...A9B8', progress: 65, days: '20/30' },
 ]
 
+/** Dummy leaderboard entries when a challenge has no on-chain participants yet. */
+export const DUMMY_CHALLENGE_LEADERBOARD: LeaderboardEntry[] = [
+  { name: '0x3f...82A1', progress: 100, days: '30/30' },
+  { name: '0x9a...B2C9', progress: 97, days: '29/30' },
+  { name: '0x21...D5F1', progress: 90, days: '27/30' },
+  { name: 'You', progress: 87, days: '26/30', isUser: true },
+  { name: '0x55...E8R9', progress: 83, days: '25/30' },
+  { name: '0x7a...C3D1', progress: 77, days: '23/30' },
+  { name: '0x1b...F4E2', progress: 70, days: '21/30' },
+  { name: '0x4c...A9B8', progress: 67, days: '20/30' },
+  { name: '0x2e...F1A3', progress: 60, days: '18/30' },
+  { name: '0x8d...C5B7', progress: 53, days: '16/30' },
+]
+
+/** Dummy usernames for "quit" list in challenge detail (committed then quit). */
+export const DUMMY_QUIT_USERS = [
+  '0x4a...B1',
+  '0x7c...D2',
+  '0x1f...E3',
+  '0x9b...A4',
+  '0x2d...C5',
+  '0x6e...F6',
+  '0x3a...87',
+  '0x5c...29',
+]
+
 /** Dummy dashboard: "my" challenges when wallet has none (for demo). */
 export const DUMMY_MY_CHALLENGES = [
   { id: '1', name: '30-Day Yoga Streak', progress: 65, daysLeft: 10, checkIns: 20, durationDays: 30, entryFee: '10 MON', profitIfComplete: '~12.5 MON' },

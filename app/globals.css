@@ -70,6 +70,10 @@
   }
 }
 
+html, body {
+  overflow-x: hidden;
+}
+
 @layer components {
   .glass {
     @apply bg-[var(--hc-glass)] backdrop-blur-md border border-[var(--hc-glass-border)] rounded-xl;

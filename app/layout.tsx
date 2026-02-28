@@ -59,7 +59,7 @@ export default function RootLayout({
       </head>
       <body className={`${_geist.className} ${_geistMono.className} font-sans antialiased bg-background text-foreground selection:bg-fuchsia-500/30`} suppressHydrationWarning>
         <Providers>
-          <div className="relative min-h-screen">
+          <div className="relative min-h-screen min-w-0 overflow-x-hidden">
             {/* Ambient Background Gradients */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
               <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-fuchsia-500/10 blur-[120px] rounded-full" />

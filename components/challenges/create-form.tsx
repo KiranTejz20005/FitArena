@@ -12,7 +12,7 @@ interface ChallengeDetailsFormProps {
 
 export function ChallengeDetailsForm({ value, onChange }: ChallengeDetailsFormProps) {
   return (
-    <Card className="glass p-6 border-white/5 space-y-6">
+    <Card className="glass p-4 sm:p-6 border-white/5 space-y-4 sm:space-y-6 min-w-0">
       <div className="space-y-1.5">
         <Label className="text-[9px] font-black uppercase tracking-widest text-white/40">Arena Name</Label>
         <Input

@@ -27,21 +27,21 @@ export default function ChallengesPage() {
   }, [displayChallenges, search])
 
   return (
-    <div className="pb-20">
-      <main className="max-w-7xl mx-auto px-6 pt-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-hc-green/10 border border-hc-green/20 text-[9px] font-black uppercase tracking-widest text-hc-green mb-4">
-              <Zap className="w-3 h-3 fill-current" />
+    <div className="pb-20 min-w-0">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-8 min-w-0">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12">
+          <div className="max-w-2xl min-w-0">
+            <div className="inline-flex items-center gap-2 px-2 py-0.5 rounded-full bg-hc-green/10 border border-hc-green/20 text-[9px] font-black uppercase tracking-widest text-hc-green mb-3 sm:mb-4">
+              <Zap className="w-3 h-3 fill-current shrink-0" />
               {displayChallenges.length} Challenge{displayChallenges.length !== 1 ? 's' : ''} {challenges.length > 0 ? 'on chain' : 'demo'}
             </div>
-            <h1 className="text-4xl md:text-5xl font-black uppercase italic tracking-tight mb-4">The Arena</h1>
-            <p className="text-white/40 text-base font-medium leading-relaxed">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase italic tracking-tight mb-3 sm:mb-4">The Arena</h1>
+            <p className="text-white/40 text-sm sm:text-base font-medium leading-relaxed">
               Choose your battle. Stake your claim. Prove your sweat.
             </p>
           </div>
 
-          <div className="flex bg-white/5 border border-white/10 p-1 rounded-xl w-full md:w-auto">
+          <div className="flex bg-white/5 border border-white/10 p-1 rounded-xl w-full md:w-auto min-w-0">
             <div className="flex-grow flex items-center px-4 gap-3 border-r border-white/5">
               <Search className="w-4 h-4 text-white/20" />
               <input
