@@ -1,262 +1,252 @@
 'use client'
 
-import { use } from 'react'
+import { use, useState } from 'react'
 import Link from 'next/link'
+import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Users, Trophy, Zap } from 'lucide-react'
-
-const challengeData: Record<string, any> = {
-  '1': {
-    icon: '🧘',
-    name: '30-Day Yoga Streak',
-    category: 'Mindfulness',
-    description: 'Complete 20 mins of daily yoga. Verify via photo proof.',
-    reward: '500 Points',
-    participants: 42,
-    daysLeft: 15,
-    progress: 68,
-    details: 'This challenge encourages daily mindfulness practice. Each day you complete 20 minutes of yoga, you earn points towards your goal.',
-    requirements: [
-      'Complete 20 minutes of yoga daily',
-      'Upload photo proof or sync wearable data',
-      'Maintain streak for 30 days',
-    ],
-    rewards: {
-      first: '500 Points',
-      second: '300 Points',
-      third: '150 Points',
-    },
-  },
-  '2': {
-    icon: '🏃',
-    name: '10K Steps Challenge',
-    category: 'Cardio',
-    description: 'Hit 10,000 steps every day for a week.',
-    reward: '300 Points',
-    participants: 128,
-    daysLeft: 7,
-    progress: 43,
-    details: 'Challenge yourself to hit 10,000 steps daily. Sync with your fitness tracker for automatic verification.',
-    requirements: [
-      'Walk 10,000 steps daily',
-      'Sync with Apple Health or Google Fit',
-      'Complete 7 consecutive days',
-    ],
-    rewards: {
-      first: '300 Points',
-      second: '200 Points',
-      third: '100 Points',
-    },
-  },
-  '3': {
-    icon: '🥗',
-    name: 'Plant-Based February',
-    category: 'Nutrition',
-    description: 'Eat plant-based meals for 28 days.',
-    reward: '400 Points',
-    participants: 15,
-    daysLeft: 28,
-    progress: 85,
-    details: 'Join this nutrition challenge and commit to eating only plant-based meals for 28 days. Document your journey!',
-    requirements: [
-      'Eat plant-based meals only',
-      'Upload meal photos daily',
-      'Complete 28 days',
-    ],
-    rewards: {
-      first: '400 Points',
-      second: '250 Points',
-      third: '125 Points',
-    },
-  },
-}
-
+import { ProgressCalendar } from '@/components/challenges/progress-calendar'
+import { ChallengeProgressCalendar } from '@/components/challenges/challenge-progress-calendar'
+import { ChallengeLeaderboard } from '@/components/challenges/challenge-leaderboard'
+import { useChallenge, useParticipant, useHealthChain } from '@/hooks/useHealthChain'
+import { formatChallengeFromChain, getCurrentDay } from '@/lib/challenge-utils'
+import {
+  ArrowLeft,
+  Users,
+  Trophy,
+  Zap,
+  Clock,
+  Lock,
+  Activity,
+  Rocket,
+} from 'lucide-react'
 export default function ChallengePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const challenge = challengeData[id] || challengeData['1']
+  const challengeId = parseInt(id, 10)
+  const isInvalidId = Number.isNaN(challengeId) || challengeId < 0
+
+  const { address } = useAccount()
+  const { joinChallenge, claimReward, isPending, isConfirming } = useHealthChain()
+  const { challenge: rawChallenge, isLoading: challengeLoading } = useChallenge(challengeId)
+  const { participant, refetch: refetchParticipant } = useParticipant(challengeId, address)
+
+  const [joinError, setJoinError] = useState<string | null>(null)
+  const [claimError, setClaimError] = useState<string | null>(null)
+
+  const challenge = rawChallenge
+    ? formatChallengeFromChain(challengeId, rawChallenge)
+    : null
+  const isParticipant = participant && participant.stakedAmount > 0n
+  const hasCompleted = participant?.hasCompleted ?? false
+  const rewardClaimed = participant?.rewardClaimed ?? false
+  const currentDay = challenge && rawChallenge ? getCurrentDay(rawChallenge.startTime, challenge.durationDays) : 0
+  const canCheckIn = isParticipant && !hasCompleted && currentDay >= 1 && currentDay <= challenge.durationDays
+
+  const handleJoin = async () => {
+    if (!challenge || !address) return
+    setJoinError(null)
+    try {
+      await joinChallenge(challengeId, challenge.stakeAmount)
+      refetchParticipant?.()
+    } catch (e) {
+      setJoinError(e instanceof Error ? e.message : 'Failed to join')
+    }
+  }
+
+  const handleClaim = async () => {
+    if (!address) return
+    setClaimError(null)
+    try {
+      await claimReward(challengeId)
+      refetchParticipant?.()
+    } catch (e) {
+      setClaimError(e instanceof Error ? e.message : 'Failed to claim')
+    }
+  }
+
+  if (isInvalidId) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-12 text-center text-white/60">
+        <p className="text-lg font-bold">Invalid challenge ID</p>
+        <Link href="/challenges" className="text-fuchsia-400 hover:underline mt-4 inline-block">
+          Back to challenges
+        </Link>
+      </div>
+    )
+  }
+
+  if (challengeLoading || (challengeId >= 0 && !rawChallenge && !challenge)) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className="h-96 rounded-xl bg-white/5 border border-white/10 animate-pulse" />
+      </div>
+    )
+  }
+
+  if (!challenge) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 py-12 text-center text-white/60">
+        <p className="text-lg font-bold">Challenge not found</p>
+        <Link href="/challenges" className="text-fuchsia-400 hover:underline mt-4 inline-block">
+          Back to challenges
+        </Link>
+      </div>
+    )
+  }
+
+  const rewardEstimate = challenge.participantCount > 0 ? `~${challenge.stakeAmount}` : '0 MON'
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:bg-gray-800 transition-colors">
-              ⚡
-            </div>
-            <span className="text-xl font-bold text-black">FitReward</span>
+    <div className="pb-24">
+      <main className="max-w-7xl mx-auto px-6 pt-8">
+        <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-white/30 mb-8">
+          <Link href="/challenges" className="hover:text-white flex items-center gap-2">
+            <ArrowLeft className="w-3 h-3" /> Back
           </Link>
-
-          <div className="flex items-center gap-8">
-            <div className="hidden md:flex items-center gap-6">
-              <Link href="/challenges" className="text-gray-600 hover:text-black transition-colors font-medium">
-                Challenges
-              </Link>
-              <Link href="/dashboard" className="text-gray-600 hover:text-black transition-colors font-medium">
-                Dashboard
-              </Link>
-              <Link href="/leaderboard" className="text-gray-600 hover:text-black transition-colors font-medium">
-                Leaderboard
-              </Link>
-            </div>
-
-            <Button className="bg-black text-white hover:bg-gray-800 transition-colors hidden sm:inline-flex">
-              Connect Wallet
-            </Button>
-          </div>
+          <span className="w-1 h-1 bg-white/20 rounded-full" />
+          <Link href="/challenges" className="hover:text-white">Challenges</Link>
+          <span className="w-1 h-1 bg-white/20 rounded-full" />
+          <span className="text-white/60">{challenge.name}</span>
         </div>
-      </nav>
 
-      {/* Header */}
-      <section className="py-8 px-6 border-b border-gray-200">
-        <div className="max-w-4xl mx-auto">
-          <Link href="/challenges" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-6">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Challenges
-          </Link>
-
-          <div className="flex items-start gap-6">
-            <div className="text-6xl">{challenge.icon}</div>
-            <div className="flex-grow">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold text-black">{challenge.name}</h1>
-                <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
-                  {challenge.category}
-                </span>
-              </div>
-              <p className="text-gray-600 mb-4">{challenge.description}</p>
-
-              <div className="flex items-center gap-6">
-                <div>
-                  <div className="text-gray-600 text-xs font-medium">REWARD</div>
-                  <div className="text-2xl font-bold text-blue-600">{challenge.reward}</div>
-                </div>
-                <div>
-                  <div className="text-gray-600 text-xs font-medium">PARTICIPANTS</div>
-                  <div className="text-2xl font-bold text-black">{challenge.participants}</div>
-                </div>
-                <div>
-                  <div className="text-gray-600 text-xs font-medium">DAYS LEFT</div>
-                  <div className="text-2xl font-bold text-black">{challenge.daysLeft}</div>
-                </div>
-              </div>
-            </div>
+        <div className="flex flex-col md:flex-row gap-8 items-start mb-12">
+          <div className="p-4 rounded-3xl bg-zinc-900 border border-white/10 shadow-2xl">
+            <Activity className="w-8 h-8 text-purple-400" />
           </div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="py-12 px-6 max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Details */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Progress */}
-            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-              <h3 className="text-lg font-bold text-black mb-4">Progress</h3>
-              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                <div 
-                  className="bg-black h-3 rounded-full transition-all duration-300" 
-                  style={{ width: `${challenge.progress}%` }}
-                ></div>
-              </div>
-              <div className="text-sm text-gray-600">{challenge.progress}% Complete</div>
-            </div>
-
-            {/* Description */}
-            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-              <h3 className="text-lg font-bold text-black mb-4">About This Challenge</h3>
-              <p className="text-gray-700 leading-relaxed mb-4">{challenge.details}</p>
-            </div>
-
-            {/* Requirements */}
-            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-              <h3 className="text-lg font-bold text-black mb-4">Requirements</h3>
-              <ul className="space-y-3">
-                {challenge.requirements.map((req: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-black flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <div className="w-2 h-2 rounded-full bg-white"></div>
-                    </div>
-                    <span className="text-gray-700">{req}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Rewards Distribution */}
-            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-              <h3 className="text-lg font-bold text-black mb-4 flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-black" />
-                Reward Distribution
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-black transition-colors">
-                  <span className="text-black font-medium">🥇 1st Place</span>
-                  <span className="text-blue-600 font-bold">{challenge.rewards.first}</span>
-                </div>
-                <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-black transition-colors">
-                  <span className="text-black font-medium">🥈 2nd Place</span>
-                  <span className="text-blue-600 font-bold">{challenge.rewards.second}</span>
-                </div>
-                <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:border-black transition-colors">
-                  <span className="text-black font-medium">🥉 3rd Place</span>
-                  <span className="text-blue-600 font-bold">{challenge.rewards.third}</span>
-                </div>
+          <div className="flex-grow">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="px-2 py-0.5 rounded-full bg-hc-green/10 border border-hc-green/20 text-[9px] font-black uppercase tracking-widest text-hc-green flex items-center gap-1.5">
+                <Zap className="w-3 h-3 fill-current" /> Active
               </div>
             </div>
-          </div>
-
-          {/* Right Column - Actions */}
-          <div className="space-y-4 h-fit sticky top-20">
-            <Button 
-              size="lg"
-              className="w-full bg-black text-white hover:bg-gray-800 font-bold rounded-lg h-12 transition-colors duration-300"
-            >
-              Join Challenge
-              <Zap className="w-5 h-5 ml-2" />
-            </Button>
-
-            <div className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-              <h4 className="font-bold text-black mb-4 flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                Community
-              </h4>
-              <div className="space-y-4">
-                <div>
-                  <div className="text-gray-600 text-xs font-medium mb-2">CURRENT PARTICIPANTS</div>
-                  <div className="text-2xl font-bold text-black">{challenge.participants}</div>
-                </div>
-                <Button variant="outline" className="w-full border border-gray-300 text-black hover:bg-white hover:border-black transition-colors font-semibold">
-                  View Leaderboard
-                </Button>
-              </div>
-            </div>
-
-            <div className="bg-blue-50 border border-blue-300 rounded-lg p-6">
-              <p className="text-sm text-gray-700">
-                <span className="font-bold text-black">Pro Tip:</span> Challenges with clear goals and reasonable timeframes have higher completion rates.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white py-12 px-6 mt-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-2 mb-6 md:mb-0">
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
-                ⚡
-              </div>
-              <span className="text-black font-bold">FitReward</span>
-            </div>
-            <p className="text-gray-600 text-sm">
-              © 2026 FitReward. Your fitness platform.
+            <h1 className="text-3xl md:text-4xl font-black mb-4 tracking-tight uppercase italic">{challenge.name}</h1>
+            <p className="text-base text-white/50 max-w-2xl leading-relaxed">
+              {challenge.durationDays}-day challenge. Check in every day to complete and split the prize pool.
             </p>
           </div>
+          <div className="flex flex-col gap-4 md:text-right">
+            <div className="border-l-2 md:border-l-0 md:border-r-2 border-fuchsia-500/30 pl-4 md:pl-0 md:pr-4 py-1.5">
+              <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-0.5">Entry Fee</div>
+              <div className="text-2xl font-black tracking-tight">
+                {challenge.stakeAmount} <span className="text-xs font-bold text-white/30 uppercase ml-1">MON</span>
+              </div>
+            </div>
+            <div className="border-l-2 md:border-l-0 md:border-r-2 border-hc-green/30 pl-4 md:pl-0 md:pr-4 py-1.5">
+              <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-0.5">Reward</div>
+              <div className="text-2xl font-black tracking-tight text-hc-green">{rewardEstimate}</div>
+            </div>
+          </div>
         </div>
-      </footer>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          {[
+            { label: 'Prize Pool', value: challenge.prizePool, icon: <Trophy className="w-4 h-4 text-fuchsia-400" /> },
+            { label: 'Participants', value: challenge.participantCount, suffix: '', icon: <Users className="w-4 h-4 text-rose-400" /> },
+            { label: 'Your Stake', value: challenge.stakeAmount, icon: <Lock className="w-4 h-4 text-hc-amber" /> },
+            { label: 'Days Left', value: challenge.daysLeft, suffix: 'Days', icon: <Clock className="w-4 h-4 text-hc-green" /> },
+          ].map((stat, i) => (
+            <div key={i} className="glass p-6 border-white/5 relative group hover:border-white/10 transition-colors">
+              <div className="absolute top-4 right-4 opacity-20 group-hover:opacity-40 transition-opacity">
+                {stat.icon}
+              </div>
+              <div className="text-[9px] font-black uppercase tracking-widest text-white/30 mb-3">{stat.label}</div>
+              <div className="text-2xl font-black tracking-tight">
+                {stat.value}
+                {stat.suffix && <span className="text-[10px] font-bold text-white/20 ml-1.5">{stat.suffix}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="lg:col-span-2">
+            {isParticipant ? (
+              <ChallengeProgressCalendar
+                challengeId={challengeId}
+                userAddress={address ?? undefined}
+                startTime={rawChallenge!.startTime}
+                durationDays={challenge.durationDays}
+              />
+            ) : (
+              <ProgressCalendar
+                days={Array.from({ length: Math.min(challenge.durationDays, 31) }, (_, i) => ({
+                  day: i + 1,
+                  status: 'upcoming' as const,
+                }))}
+                monthName={challenge.startTime.toLocaleString('default', { month: 'long', year: 'numeric' })}
+              />
+            )}
+          </div>
+          <div>
+            <ChallengeLeaderboard
+              challengeId={challengeId}
+              durationDays={challenge.durationDays}
+              currentUserAddress={address ?? undefined}
+            />
+          </div>
+        </div>
+      </main>
+
+      <div className="fixed bottom-0 left-0 right-0 z-40 px-6 pb-6 pt-10 pointer-events-none">
+        <div className="max-w-7xl mx-auto glass p-4 border-white/10 shadow-[0_-20px_50px_rgba(0,0,0,0.5)] pointer-events-auto flex flex-col sm:flex-row items-center justify-between gap-4 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-fuchsia-500/50 to-transparent" />
+
+          <div>
+            <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-0.5">Ready to commit?</div>
+            <div className="text-lg font-black">
+              {!isParticipant ? (
+                <>
+                  Stake <span className="text-fuchsia-400">{challenge.stakeAmount}</span>{' '}
+                  <span className="text-white/30 text-xs font-bold lowercase italic">to verify proof of sweat</span>
+                </>
+              ) : hasCompleted ? (
+                rewardClaimed ? (
+                  <span className="text-hc-green">Reward claimed</span>
+                ) : (
+                  <span className="text-hc-green">Complete! Claim your reward</span>
+                )
+              ) : (
+                <span className="text-white/30 text-xs font-bold lowercase italic">
+                  Day {participant ? Number(participant.checkInCount) : 0}/{challenge.durationDays} check-ins
+                </span>
+              )}
+            </div>
+            {(joinError || claimError) && (
+              <p className="text-red-400 text-xs mt-1">{joinError ?? claimError}</p>
+            )}
+          </div>
+
+          <div className="flex items-center gap-3">
+            {!address ? (
+              <Button disabled className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest">
+                Connect wallet to join
+              </Button>
+            ) : !isParticipant ? (
+              <Button
+                onClick={handleJoin}
+                disabled={isPending || isConfirming}
+                className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest group"
+              >
+                {isPending || isConfirming ? 'Confirm in wallet...' : `Join — Stake ${challenge.stakeAmount}`}
+              </Button>
+            ) : hasCompleted && !rewardClaimed ? (
+              <Button
+                onClick={handleClaim}
+                disabled={isPending || isConfirming}
+                className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest"
+              >
+                {isPending || isConfirming ? 'Confirming...' : 'Claim Reward'}
+              </Button>
+            ) : canCheckIn ? (
+              <Link href={`/challenges/${id}/check-in`}>
+                <Button className="btn-primary h-12 px-8 text-sm font-black rounded-xl uppercase tracking-widest group">
+                  Verify Daily Progress
+                  <Rocket className="w-4 h-4 ml-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                </Button>
+              </Link>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

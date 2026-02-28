@@ -1,7 +1,36 @@
 'use client'
 
+import '@rainbow-me/rainbowkit/styles.css'
 import { createContext, useContext, useEffect, useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
+import { WagmiProvider } from 'wagmi'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit'
+import { config } from '@/lib/wagmi'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false, retry: 1 },
+  },
+})
+
+function Web3Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider
+          theme={darkTheme({
+            accentColor: '#a855f7',
+            accentColorForeground: 'white',
+            borderRadius: 'large',
+          })}
+        >
+          {children}
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  )
+}
 
 type Theme = 'light' | 'dark'
 
@@ -46,6 +75,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     <ThemeContext.Provider value={{ theme, toggleTheme, mounted }}>
       {children}
     </ThemeContext.Provider>
+  )
+}
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <Web3Providers>
+      <ThemeProvider>{children}</ThemeProvider>
+    </Web3Providers>
   )
 }
 

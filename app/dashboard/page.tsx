@@ -1,157 +1,156 @@
 'use client'
 
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { useAccount } from 'wagmi'
+import { useAllChallenges } from '@/hooks/useHealthChain'
+import { useParticipant } from '@/hooks/useHealthChain'
+import { formatChallengeFromChain } from '@/lib/challenge-utils'
 import { ArrowLeft, Zap, Target, TrendingUp } from 'lucide-react'
 
-export default function DashboardPage() {
-  const stats = [
-    {
-      label: 'Active Challenges',
-      value: '3',
-      icon: Target,
-      color: 'text-black'
-    },
-    {
-      label: 'Total Points Earned',
-      value: '1,250',
-      icon: Zap,
-      color: 'text-blue-600'
-    },
-    {
-      label: 'Current Streak',
-      value: '12 Days',
-      icon: TrendingUp,
-      color: 'text-black'
-    },
-  ]
+const MAX = 30
 
-  const activeChallenges = [
-    {
-      name: '30-Day Yoga Streak',
-      progress: 68,
-      daysLeft: 10,
-      pointsEarned: 340,
-    },
-    {
-      name: '10K Steps Challenge',
-      progress: 43,
-      daysLeft: 5,
-      pointsEarned: 215,
-    },
-    {
-      name: 'Clean Eating Challenge',
-      progress: 85,
-      daysLeft: 2,
-      pointsEarned: 425,
-    },
+export default function DashboardPage() {
+  const { address } = useAccount()
+  const { challenges, count, isLoading } = useAllChallenges()
+
+  const p0 = useParticipant(0, address ?? undefined)
+  const p1 = useParticipant(1, address ?? undefined)
+  const p2 = useParticipant(2, address ?? undefined)
+  const p3 = useParticipant(3, address ?? undefined)
+  const p4 = useParticipant(4, address ?? undefined)
+  const p5 = useParticipant(5, address ?? undefined)
+  const p6 = useParticipant(6, address ?? undefined)
+  const p7 = useParticipant(7, address ?? undefined)
+  const p8 = useParticipant(8, address ?? undefined)
+  const p9 = useParticipant(9, address ?? undefined)
+  const p10 = useParticipant(10, address ?? undefined)
+  const p11 = useParticipant(11, address ?? undefined)
+  const p12 = useParticipant(12, address ?? undefined)
+  const p13 = useParticipant(13, address ?? undefined)
+  const p14 = useParticipant(14, address ?? undefined)
+  const p15 = useParticipant(15, address ?? undefined)
+  const p16 = useParticipant(16, address ?? undefined)
+  const p17 = useParticipant(17, address ?? undefined)
+  const p18 = useParticipant(18, address ?? undefined)
+  const p19 = useParticipant(19, address ?? undefined)
+  const p20 = useParticipant(20, address ?? undefined)
+  const p21 = useParticipant(21, address ?? undefined)
+  const p22 = useParticipant(22, address ?? undefined)
+  const p23 = useParticipant(23, address ?? undefined)
+  const p24 = useParticipant(24, address ?? undefined)
+  const p25 = useParticipant(25, address ?? undefined)
+  const p26 = useParticipant(26, address ?? undefined)
+  const p27 = useParticipant(27, address ?? undefined)
+  const p28 = useParticipant(28, address ?? undefined)
+  const p29 = useParticipant(29, address ?? undefined)
+  const participants = [p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16, p17, p18, p19, p20, p21, p22, p23, p24, p25, p26, p27, p28, p29]
+
+  const myChallenges = challenges
+    .map((c, i) => {
+      const formatted = formatChallengeFromChain(c.id, c)
+      const participant = participants[i]?.participant
+      if (!participant || participant.stakedAmount <= 0n) return null
+      const progress = formatted.durationDays > 0 ? Math.round((Number(participant.checkInCount) / formatted.durationDays) * 100) : 0
+      return {
+        id: c.id,
+        name: formatted.name,
+        progress,
+        daysLeft: formatted.daysLeft,
+        checkInCount: Number(participant.checkInCount),
+        durationDays: formatted.durationDays,
+        hasCompleted: participant.hasCompleted,
+      }
+    })
+    .filter(Boolean) as { id: number; name: string; progress: number; daysLeft: number; checkInCount: number; durationDays: number; hasCompleted: boolean }[]
+
+  const stats = [
+    { label: 'Active Challenges', value: String(myChallenges.length), icon: Target, color: 'text-fuchsia-400' },
+    { label: 'Total Check-ins', value: String(myChallenges.reduce((s, c) => s + c.checkInCount, 0)), icon: Zap, color: 'text-hc-green' },
+    { label: 'Challenges Completed', value: String(myChallenges.filter((c) => c.hasCompleted).length), icon: TrendingUp, color: 'text-hc-amber' },
   ]
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Navigation */}
-      <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:bg-gray-800 transition-colors">
-              ⚡
-            </div>
-            <span className="text-xl font-bold text-black">FitReward</span>
-          </Link>
-
-          <div className="flex items-center gap-8">
-            <div className="hidden md:flex items-center gap-6">
-              <Link href="/challenges" className="text-gray-600 hover:text-black transition-colors font-medium">
-                Challenges
-              </Link>
-              <Link href="/dashboard" className="text-black transition-colors font-medium border-b-2 border-black">
-                Dashboard
-              </Link>
-              <Link href="/leaderboard" className="text-gray-600 hover:text-black transition-colors font-medium">
-                Leaderboard
-              </Link>
-            </div>
-
-            <Button className="bg-black text-white hover:bg-gray-800 transition-colors hidden sm:inline-flex">
-              Connect Wallet
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      {/* Header */}
-      <section className="py-12 px-6 border-b border-gray-200">
+    <div className="min-h-screen pb-24">
+      <section className="py-12 px-6 border-b border-white/10">
         <div className="max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold text-black mb-2">Your Dashboard</h1>
-          <p className="text-gray-600">Track your progress and achievements</p>
+          <h1 className="text-4xl md:text-5xl font-black text-white mb-2 uppercase italic tracking-tight">Your Dashboard</h1>
+          <p className="text-white/50">Track your progress and achievements</p>
         </div>
       </section>
 
-      {/* Stats */}
       <section className="py-12 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {stats.map((stat, idx) => {
-            const Icon = stat.icon
-            return (
-              <div key={idx} className="bg-gray-100 border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="text-gray-600 text-sm font-medium mb-2">{stat.label}</div>
-                    <div className={`text-3xl font-bold ${stat.color}`}>{stat.value}</div>
-                  </div>
-                  <Icon className={`w-6 h-6 ${stat.color}`} />
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Active Challenges */}
-        <div>
-          <h2 className="text-2xl font-bold text-black mb-6">Active Challenges</h2>
+        {!address ? (
+          <div className="text-center py-20 text-white/50">
+            <p className="text-lg font-bold mb-2">Connect your wallet</p>
+            <p className="text-sm">Connect to see your challenges and progress.</p>
+          </div>
+        ) : isLoading ? (
           <div className="space-y-4">
-            {activeChallenges.map((challenge, idx) => (
-              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-6 hover:border-black transition-colors duration-300">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-black">{challenge.name}</h3>
-                  <div className="text-right">
-                    <div className="text-sm text-gray-600">{challenge.daysLeft} days left</div>
-                    <div className="text-lg font-bold text-blue-600">{challenge.pointsEarned} pts</div>
-                  </div>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-black h-2 rounded-full transition-all duration-300" 
-                    style={{ width: `${challenge.progress}%` }}
-                  ></div>
-                </div>
-                <div className="text-sm text-gray-600 mt-2">{challenge.progress}% Complete</div>
-              </div>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-24 rounded-xl bg-white/5 border border-white/10 animate-pulse" />
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white py-12 px-6 mt-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-2 mb-6 md:mb-0">
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center text-white font-bold">
-                ⚡
-              </div>
-              <span className="text-black font-bold">FitReward</span>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {stats.map((stat, idx) => {
+                const Icon = stat.icon
+                return (
+                  <div key={idx} className="glass p-6 border-white/5 hover:border-white/10 transition-colors duration-300 rounded-xl">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="text-white/50 text-sm font-medium mb-2">{stat.label}</div>
+                        <div className={`text-3xl font-black ${stat.color}`}>{stat.value}</div>
+                      </div>
+                      <Icon className={`w-6 h-6 ${stat.color}`} />
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-            <p className="text-gray-600 text-sm">
-              © 2026 FitReward. Your fitness platform.
-            </p>
-          </div>
-        </div>
-      </footer>
+
+            <div>
+              <h2 className="text-2xl font-black text-white mb-6 uppercase italic tracking-tight">Active Challenges</h2>
+              {myChallenges.length === 0 ? (
+                <div className="text-center py-16 text-white/50 glass rounded-xl border border-white/5">
+                  <p className="font-bold mb-2">No challenges joined yet</p>
+                  <p className="text-sm mb-4">Join a challenge from the Arena to see it here.</p>
+                  <Link href="/challenges" className="text-fuchsia-400 hover:underline font-bold">
+                    Browse challenges
+                  </Link>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {myChallenges.map((challenge) => (
+                    <Link key={challenge.id} href={`/challenges/${challenge.id}`}>
+                      <div className="glass p-6 border-white/5 hover:border-fuchsia-500/30 rounded-xl transition-colors duration-300">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-lg font-bold text-white">{challenge.name}</h3>
+                          <div className="text-right">
+                            <div className="text-sm text-white/50">{challenge.daysLeft} days left</div>
+                            <div className="text-lg font-bold text-hc-green">{challenge.checkInCount}/{challenge.durationDays} check-ins</div>
+                          </div>
+                        </div>
+                        <div className="w-full bg-white/10 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-fuchsia-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${Math.min(100, challenge.progress)}%` }}
+                          />
+                        </div>
+                        <div className="text-sm text-white/50 mt-2">{challenge.progress}% Complete</div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
+        )}
+      </section>
     </div>
   )
 }

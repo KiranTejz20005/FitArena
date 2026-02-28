@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { ThemeProvider } from './providers'
+import { Providers } from './providers'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -45,6 +45,8 @@ const themeScript = `
   })()
 `
 
+import { Navbar } from '@/components/layout/navbar'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -55,10 +57,19 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${_geist.className} ${_geistMono.className} font-sans antialiased bg-white dark:bg-slate-950 text-slate-900 dark:text-white transition-colors duration-300`}>
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+      <body className={`${_geist.className} ${_geistMono.className} font-sans antialiased bg-background text-foreground selection:bg-fuchsia-500/30`}>
+        <Providers>
+          <div className="relative min-h-screen">
+            {/* Ambient Background Gradients */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+              <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-fuchsia-500/10 blur-[120px] rounded-full" />
+              <div className="absolute top-[20%] -right-[10%] w-[30%] h-[50%] bg-purple-600/10 blur-[120px] rounded-full" />
+              <div className="absolute -bottom-[10%] left-[20%] w-[50%] h-[30%] bg-emerald-500/5 blur-[120px] rounded-full" />
+            </div>
+            <Navbar />
+            {children}
+          </div>
+        </Providers>
       </body>
     </html>
   )
