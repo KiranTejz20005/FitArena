@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from './providers'
-import { ArrowRight, Activity } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 export default function HomePage() {
   const [activeFilter, setActiveFilter] = useState('All')
